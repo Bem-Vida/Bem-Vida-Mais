@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campanhas | BemVida+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="cabecalho-publico">
+    <a href="index.html" class="logo"><img src="img/logo.png" alt="BemVida+"> BemVida+</a>
+    <nav class="nav-publica">
+      <a href="index.html">Início</a>
+      <a href="quem-somos.html">Quem Somos</a>
+      <a href="campanhas.html" class="ativo">Campanhas</a>
+    </nav>
+    <div class="acoes-cabecalho">
+      <a href="login.html" class="botao botao-secundario">Login</a>
+      <a href="cadastro.html" class="botao botao-escuro">Cadastro</a>
+    </div>
+  </header>
+
+  <section class="secao">
+    <div class="container">
+      <span class="eyebrow">CAMPANHAS</span>
+      <h1>Encontre uma campanha para apoiar</h1>
+
+      <!-- Filtros: o JS (no fim da página) lê estes campos e redesenha os cards -->
+      <form class="card barra-filtros" id="filtros">
+        <div class="campo-formulario">
+          <label for="busca">Buscar</label>
+          <input type="text" id="busca" placeholder="buscar campanha...">
+        </div>
+        <div class="campo-formulario">
+          <label for="categoria">Categoria</label>
+          <select id="categoria">
+            <option value="todas">Todas</option>
+            <option value="alimentos">Alimentos</option>
+            <option value="roupas">Roupas</option>
+            <option value="higiene">Higiene</option>
+            <option value="outros">Outros</option>
+          </select>
+        </div>
+        <div class="campo-formulario">
+          <label for="ordem">Ordenar por</label>
+          <select id="ordem">
+            <option value="recentes">Mais recentes</option>
+            <option value="progresso">Maior progresso</option>
+            <option value="faltam">Mais itens faltando</option>
+            <option value="nome">Nome (A–Z)</option>
+          </select>
+        </div>
+        <button type="submit" class="botao botao-escuro" style="border:none;">Filtrar</button>
+      </form>
+
+      <p class="contador-resultados" id="contador"></p>
+      <div class="grade-campanhas" id="lista"></div>
+      <div class="paginacao" id="paginacao"></div>
+    </div>
+  </section>
+
+  <footer class="rodape">
+    [ links institucionais · contato · termos ]
+  </footer>
+
+  <script src="js/dados.js"></script>
+  <script>
+    var POR_PAGINA = 6;
+    var paginaAtual = 1;
+
+    var campoBusca = document.getElementById('busca');
+    var campoCategoria = document.getElementById('categoria');
+    var campoOrdem = document.getElementById('ordem');
+
+    // 1) Aplica busca + categoria + ordenação e devolve a lista final
+    function filtrar() {
+      var texto = campoBusca.value.trim().toLowerCase();
+      var cat = campoCategoria.value;
+
+      var lista = CAMPANHAS.filter(function (c) {
+        var bateTexto = c.titulo.toLowerCase().indexOf(texto) !== -1;
+        var bateCategoria = (cat === 'todas') || (c.categoria === cat);
+        return bateTexto && bateCategoria;
+      });
+
+      var ordem = campoOrdem.value;
+      lista.sort(function (a, b) {
+        if (ordem === 'recentes')  return b.criada.localeCompare(a.criada);
+        if (ordem === 'progresso') return percentual(b) - percentual(a);
+        if (ordem === 'faltam')    return (b.meta - b.recebidos) - (a.meta - a.recebidos);
+        return a.titulo.localeCompare(b.titulo);
+      });
+      return lista;
+    }
+
+    // 2) Desenha os cards da página atual e os botões de paginação
+    function desenhar() {
+      var lista = filtrar();
+      var total = lista.length;
+      var totalPaginas = Math.max(1, Math.ceil(total / POR_PAGINA));
+      if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
+
+      var inicio = (paginaAtual - 1) * POR_PAGINA;
+      var daPagina = lista.slice(inicio, inicio + POR_PAGINA);
+
+      document.getElementById('contador').textContent =
+        total + (total === 1 ? ' campanha encontrada' : ' campanhas encontradas');
+
+      document.getElementById('lista').innerHTML = total === 0
+        ? '<div class="vazio">Nenhuma campanha encontrada. Tente outra busca ou categoria.</div>'
+        : daPagina.map(htmlCard).join('');
+
+      var botoes = '<button data-p="' + (paginaAtual - 1) + '"' + (paginaAtual === 1 ? ' disabled' : '') + '>‹</button>';
+      for (var p = 1; p <= totalPaginas; p++) {
+        botoes += '<button data-p="' + p + '"' + (p === paginaAtual ? ' class="ativo"' : '') + '>' + p + '</button>';
+      }
+      botoes += '<button data-p="' + (paginaAtual + 1) + '"' + (paginaAtual === totalPaginas ? ' disabled' : '') + '>›</button>';
+
+      var nav = document.getElementById('paginacao');
+      nav.innerHTML = totalPaginas > 1 ? botoes : '';
+    }
+
+    // 3) Eventos: qualquer mudança volta para a página 1 e redesenha
+    function refiltrar() { paginaAtual = 1; desenhar(); }
+    campoBusca.addEventListener('input', refiltrar);
+    campoCategoria.addEventListener('change', refiltrar);
+    campoOrdem.addEventListener('change', refiltrar);
+    document.getElementById('filtros').addEventListener('submit', function (e) {
+      e.preventDefault();   // não recarrega a página
+      refiltrar();
+    });
+    document.getElementById('paginacao').addEventListener('click', function (e) {
+      var p = e.target.getAttribute('data-p');
+      if (p) { paginaAtual = Number(p); desenhar(); window.scrollTo(0, 0); }
+    });
+
+    desenhar();
+  </script>
+
+</body>
+</html>

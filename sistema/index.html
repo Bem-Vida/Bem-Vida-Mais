@@ -36,7 +36,10 @@
           <a href="quem-somos.html" class="botao botao-secundario">Conheça o projeto</a>
         </div>
       </div>
-      <div class="img-placeholder" style="height:280px;">[ banner em destaque ]</div>
+      <div class="capa capa-alimentos" style="height:280px;">
+        <img src="img/banner-home.jpg" alt="" onerror="this.remove()">
+        <span>BEMVIDA+</span>
+      </div>
     </div>
   </section>
 
@@ -48,57 +51,12 @@
           <span class="eyebrow">CAMPANHAS</span>
           <h2>Campanhas em destaque</h2>
         </div>
-        <a href="campanhas.html" style="font-size:0.9rem; color:var(--texto-secundario);">[ ver todas ]</a>
+        <a href="campanhas.html" style="font-size:0.9rem; color:var(--texto-secundario);">Ver todas →</a>
       </div>
 
-      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
+      <!-- Os 3 cards são montados pelo JS a partir de js/dados.js -->
+      <div class="grade-campanhas" id="destaques"></div>
 
-        <div class="card card-campanha">
-          <div class="img-placeholder">[ imagem ]</div>
-          <span class="eyebrow">ALIMENTOS</span>
-          <h3>Cestas para famílias</h3>
-          <div class="barra-progresso"><span style="width:70%;"></span></div>
-          <div class="progresso-texto">
-            <span>210 de 300 itens recebidos</span>
-            <span>70%</span>
-          </div>
-          <div class="acoes">
-            <a href="campanha-detalhes.html" class="botao botao-escuro">Doar</a>
-            <a href="campanha-detalhes.html" class="botao botao-secundario">Ver mais</a>
-          </div>
-        </div>
-
-        <div class="card card-campanha">
-          <div class="img-placeholder">[ imagem ]</div>
-          <span class="eyebrow">ROUPAS</span>
-          <h3>Agasalhos para o inverno</h3>
-          <div class="barra-progresso"><span style="width:70%;"></span></div>
-          <div class="progresso-texto">
-            <span>84 de 120 itens recebidos</span>
-            <span>70%</span>
-          </div>
-          <div class="acoes">
-            <a href="campanha-detalhes.html" class="botao botao-escuro">Doar</a>
-            <a href="campanha-detalhes.html" class="botao botao-secundario">Ver mais</a>
-          </div>
-        </div>
-
-        <div class="card card-campanha">
-          <div class="img-placeholder">[ imagem ]</div>
-          <span class="eyebrow">HIGIENE</span>
-          <h3>Kits de cuidado pessoal</h3>
-          <div class="barra-progresso"><span style="width:54%;"></span></div>
-          <div class="progresso-texto">
-            <span>135 de 250 itens recebidos</span>
-            <span>54%</span>
-          </div>
-          <div class="acoes">
-            <a href="campanha-detalhes.html" class="botao botao-escuro">Doar</a>
-            <a href="campanha-detalhes.html" class="botao botao-secundario">Ver mais</a>
-          </div>
-        </div>
-
-      </div>
     </div>
   </section>
 
@@ -142,6 +100,13 @@
   <footer class="rodape">
     [ links institucionais · contato · termos ]
   </footer>
+
+  <script src="js/dados.js"></script>
+  <script>
+    // Mostra as 3 campanhas mais recentes
+    document.getElementById('destaques').innerHTML =
+      CAMPANHAS.slice(0, 3).map(htmlCard).join('');
+  </script>
 
 </body>
 </html>

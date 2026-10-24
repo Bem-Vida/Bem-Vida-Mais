@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doações Recebidas | BemVida+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout-logado">
+
+    <aside class="sidebar">
+      <a href="../index.html" class="logo"><img src="../img/logo.png" alt="BemVida+"> BemVida+</a>
+      <span class="rotulo-perfil">ONG</span>
+      <nav class="menu-lateral">
+        <a href="area.html">Minha Área</a>
+        <a href="minhas-campanhas.html">Minhas Campanhas</a>
+        <a href="nova-campanha.html">Nova Campanha</a>
+        <a href="doacoes-recebidas.html" class="ativo">Doações Recebidas</a>
+        <a href="perfil-ong.html">Perfil da ONG</a>
+        <a href="../index.html">Sair</a>
+      </nav>
+    </aside>
+
+    <main class="conteudo-principal">
+
+      <div class="cabecalho-area">
+        <div>
+          <span class="eyebrow">ONG</span>
+          <h1 style="font-size:1.4rem; margin-bottom:0;" id="titulo-pagina">Doações Recebidas</h1>
+        </div>
+        <div class="info-usuario">
+          <span style="color: var(--texto-secundario); font-size: 0.9rem;">Associação Mãos Amigas</span>
+          <div class="avatar-circulo"></div>
+        </div>
+      </div>
+
+      <div class="grade-resumo">
+        <div class="card card-resumo">
+          <span class="eyebrow">TOTAL DE ITENS RECEBIDOS</span>
+          <div class="valor" id="r-itens"></div>
+        </div>
+        <div class="card card-resumo">
+          <span class="eyebrow">DOAÇÕES CONFIRMADAS</span>
+          <div class="valor" id="r-conf"></div>
+        </div>
+        <div class="card card-resumo">
+          <span class="eyebrow">DOAÇÕES PENDENTES</span>
+          <div class="valor" id="r-pend"></div>
+        </div>
+      </div>
+
+      <div class="card barra-ferramentas">
+        <div class="campo-formulario busca">
+          <input type="text" id="busca" placeholder="Buscar por campanha, doador ou item">
+        </div>
+        <div class="campo-formulario">
+          <select id="filtro-status">
+            <option value="todos">Todos</option>
+            <option>Pendente</option>
+            <option>Confirmada</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tabela-wrap">
+        <table class="tabela">
+          <thead>
+            <tr><th>CAMPANHA</th><th>DOADOR</th><th>ITENS</th><th>QTD.</th><th>DATA</th><th>STATUS</th><th>AÇÃO</th></tr>
+          </thead>
+          <tbody id="tabela"></tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../js/dados.js"></script>
+  <script>
+    var DOACOES = [
+      { id: 1, campanha: 'Cestas para famílias',    doador: 'Doador A', itens: 'Arroz, Feijão',  qtd: 10, data: '28/09/2026', status: 'Pendente' },
+      { id: 2, campanha: 'Agasalhos para o inverno', doador: 'Doador B', itens: 'Casacos',        qtd: 4,  data: '27/09/2026', status: 'Confirmada' },
+      { id: 3, campanha: 'Kits de cuidado pessoal',  doador: 'Doador C', itens: 'Sabonete, Escova', qtd: 12, data: '25/09/2026', status: 'Pendente' },
+      { id: 4, campanha: 'Cestas para famílias',    doador: 'Doador D', itens: 'Óleo',           qtd: 6,  data: '22/09/2026', status: 'Confirmada' }
+    ];
+
+    function desenhar() {
+      // Cards de resumo: somam só as doações confirmadas
+      var itens = 0, conf = 0, pend = 0;
+      DOACOES.forEach(function (d) {
+        if (d.status === 'Confirmada') { conf++; itens += d.qtd; } else { pend++; }
+      });
+      document.getElementById('r-itens').textContent = itens + ' itens';
+      document.getElementById('r-conf').textContent = conf;
+      document.getElementById('r-pend').textContent = pend;
+
+      var texto = document.getElementById('busca').value.trim().toLowerCase();
+      var status = document.getElementById('filtro-status').value;
+
+      var linhas = DOACOES.filter(function (d) {
+        var alvo = (d.campanha + ' ' + d.doador + ' ' + d.itens).toLowerCase();
+        return alvo.indexOf(texto) !== -1 && (status === 'todos' || d.status === status);
+      }).map(function (d) {
+        var acao = d.status === 'Pendente'
+          ? '<button class="botao-mini confirmar" data-id="' + d.id + '">Confirmar recebimento</button>'
+          : '<span style="color:var(--texto-secundario);">✓ recebido</span>';
+        return '<tr><td><strong>' + d.campanha + '</strong></td><td>' + d.doador + '</td><td>' + d.itens + '</td><td>' + d.qtd +
+          ' itens</td><td>' + d.data + '</td><td><span class="status status-' + d.status.toLowerCase() + '">' + d.status +
+          '</span></td><td>' + acao + '</td></tr>';
+      });
+
+      document.getElementById('tabela').innerHTML = linhas.length
+        ? linhas.join('')
+        : '<tr><td colspan="7" class="vazio">Nenhuma doação encontrada.</td></tr>';
+    }
+
+    document.getElementById('tabela').addEventListener('click', function (e) {
+      var id = e.target.getAttribute('data-id');
+      if (!id) return;
+      DOACOES.find(function (d) { return d.id === Number(id); }).status = 'Confirmada';
+      desenhar();
+      mostrarAviso('Recebimento confirmado.');
+    });
+    document.getElementById('busca').addEventListener('input', desenhar);
+    document.getElementById('filtro-status').addEventListener('change', desenhar);
+    desenhar();
+  </script>
+
+</body>
+</html>

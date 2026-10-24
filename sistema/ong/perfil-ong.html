@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil da ONG | BemVida+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout-logado">
+
+    <aside class="sidebar">
+      <a href="../index.html" class="logo"><img src="../img/logo.png" alt="BemVida+"> BemVida+</a>
+      <span class="rotulo-perfil">ONG</span>
+      <nav class="menu-lateral">
+        <a href="area.html">Minha Área</a>
+        <a href="minhas-campanhas.html">Minhas Campanhas</a>
+        <a href="nova-campanha.html">Nova Campanha</a>
+        <a href="doacoes-recebidas.html">Doações Recebidas</a>
+        <a href="perfil-ong.html" class="ativo">Perfil da ONG</a>
+        <a href="../index.html">Sair</a>
+      </nav>
+    </aside>
+
+    <main class="conteudo-principal">
+
+      <div class="cabecalho-area">
+        <div>
+          <span class="eyebrow">ONG</span>
+          <h1 style="font-size:1.4rem; margin-bottom:0;" id="titulo-pagina">Perfil da ONG</h1>
+        </div>
+        <div class="info-usuario">
+          <span style="color: var(--texto-secundario); font-size: 0.9rem;">Associação Mãos Amigas</span>
+          <div class="avatar-circulo"></div>
+        </div>
+      </div>
+
+      <form id="form-perfil">
+        <div class="grade-duas-colunas">
+
+          <div class="card painel">
+            <span class="eyebrow">DADOS INSTITUCIONAIS</span>
+            <div class="linha-avatar">
+              <div class="avatar-grande"></div>
+              <a href="#" class="link-sair">alterar logo</a>
+            </div>
+
+            <div class="campo-formulario">
+              <label for="nome">Nome da ONG</label>
+              <input type="text" id="nome" value="Associação Mãos Amigas">
+            </div>
+            <div class="grade-formulario">
+              <div class="campo-formulario">
+                <label for="cnpj">CNPJ</label>
+                <input type="text" id="cnpj" value="00.000.000/0001-00">
+              </div>
+              <div class="campo-formulario">
+                <label for="area">Área de atuação</label>
+                <input type="text" id="area" value="Assistência social">
+              </div>
+              <div class="campo-formulario">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" value="contato@maosamigas.org">
+              </div>
+              <div class="campo-formulario">
+                <label for="telefone">Telefone</label>
+                <input type="text" id="telefone" value="(00) 0000-0000">
+              </div>
+            </div>
+            <div class="campo-formulario">
+              <label for="endereco">Endereço</label>
+              <input type="text" id="endereco" value="Rua das Flores, 100, Centro, São Paulo — SP">
+            </div>
+            <div class="campo-formulario" style="margin-bottom:0;">
+              <label for="descricao">Descrição</label>
+              <textarea id="descricao" rows="5">Associação que atende famílias do bairro com alimentos, roupas e itens de higiene.</textarea>
+            </div>
+          </div>
+
+          <div>
+            <div class="card painel">
+              <span class="eyebrow">DOCUMENTOS ENVIADOS</span>
+              <div class="lista-documentos" id="documentos">
+                <div class="item">Estatuto social.pdf <span>enviado</span></div>
+                <div class="item">Cartão CNPJ.pdf <span>enviado</span></div>
+                <div class="item">Ata de eleição da diretoria.pdf <span>enviado</span></div>
+              </div>
+              <label for="novo-doc" class="area-upload" style="display:block; margin-top:12px; font-weight:400; letter-spacing:0;">+ enviar novo documento</label>
+              <input type="file" id="novo-doc" style="display:none;">
+            </div>
+
+            <div class="card painel">
+              <button type="submit" class="botao botao-escuro botao-bloco" style="margin-bottom:0;">Salvar alterações</button>
+            </div>
+          </div>
+
+        </div>
+      </form>
+
+    </main>
+  </div>
+
+  <script src="../js/dados.js"></script>
+  <script>
+    // Novo documento: adiciona o nome do arquivo escolhido na lista
+    document.getElementById('novo-doc').addEventListener('change', function () {
+      if (!this.files.length) return;
+      var item = document.createElement('div');
+      item.className = 'item';
+      item.innerHTML = '<span style="color:var(--texto-titulo);"></span><span>enviado</span>';
+      item.firstChild.textContent = this.files[0].name;
+      document.getElementById('documentos').appendChild(item);
+    });
+
+    document.getElementById('form-perfil').addEventListener('submit', function (e) {
+      e.preventDefault();
+      mostrarAviso('Alterações salvas.');
+    });
+  </script>
+
+</body>
+</html>

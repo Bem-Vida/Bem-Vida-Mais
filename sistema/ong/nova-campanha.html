@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Campanha | BemVida+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout-logado">
+
+    <aside class="sidebar">
+      <a href="../index.html" class="logo"><img src="../img/logo.png" alt="BemVida+"> BemVida+</a>
+      <span class="rotulo-perfil">ONG</span>
+      <nav class="menu-lateral">
+        <a href="area.html">Minha Área</a>
+        <a href="minhas-campanhas.html">Minhas Campanhas</a>
+        <a href="nova-campanha.html" class="ativo">Nova Campanha</a>
+        <a href="doacoes-recebidas.html">Doações Recebidas</a>
+        <a href="perfil-ong.html">Perfil da ONG</a>
+        <a href="../index.html">Sair</a>
+      </nav>
+    </aside>
+
+    <main class="conteudo-principal">
+
+      <div class="cabecalho-area">
+        <div>
+          <span class="eyebrow">ONG</span>
+          <h1 style="font-size:1.4rem; margin-bottom:0;" id="titulo-pagina">Nova Campanha</h1>
+        </div>
+        <div class="info-usuario">
+          <span style="color: var(--texto-secundario); font-size: 0.9rem;">Associação Mãos Amigas</span>
+          <div class="avatar-circulo"></div>
+        </div>
+      </div>
+
+      <form id="form-campanha" novalidate>
+        <div class="grade-duas-colunas">
+
+          <div class="card painel">
+            <span class="eyebrow">DADOS DA CAMPANHA</span>
+
+            <div class="campo-formulario">
+              <label for="titulo">Título da campanha</label>
+              <input type="text" id="titulo" placeholder="Ex: Cestas para famílias">
+              <div class="erro-campo" id="erro-titulo">Informe o título.</div>
+            </div>
+
+            <div class="grade-formulario">
+              <div class="campo-formulario">
+                <label for="categoria">Categoria</label>
+                <select id="categoria">
+                  <option value="">Selecione</option>
+                  <option value="alimentos">Alimentos</option>
+                  <option value="roupas">Roupas</option>
+                  <option value="higiene">Higiene</option>
+                  <option value="outros">Outros</option>
+                </select>
+                <div class="erro-campo" id="erro-categoria">Escolha uma categoria.</div>
+              </div>
+              <div class="campo-formulario">
+                <label for="meta">Meta de itens (quantidade)</label>
+                <input type="number" id="meta" min="1" placeholder="300">
+                <div class="erro-campo" id="erro-meta">Informe uma meta maior que zero.</div>
+              </div>
+              <div class="campo-formulario">
+                <label for="inicio">Data de início</label>
+                <input type="date" id="inicio">
+              </div>
+              <div class="campo-formulario">
+                <label for="fim">Data de término</label>
+                <input type="date" id="fim">
+                <div class="erro-campo" id="erro-fim">O término deve ser depois do início.</div>
+              </div>
+            </div>
+
+            <div class="campo-formulario">
+              <label for="descricao">Descrição</label>
+              <textarea id="descricao" rows="5" placeholder="Descreva o objetivo, o público atendido e como os itens serão entregues"></textarea>
+            </div>
+
+            <div class="campo-formulario" style="margin-bottom:0;">
+              <label>Itens necessários</label>
+              <div id="chips">
+                <button type="button" class="chip">Roupas</button>
+                <button type="button" class="chip">Alimentos</button>
+                <button type="button" class="chip">Produtos de higiene</button>
+                <button type="button" class="chip">Outros</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card painel">
+              <span class="eyebrow">IMAGEM DE CAPA</span>
+              <label for="capa" class="area-upload" id="previa-capa" style="display:block; height:160px; background-size:cover; background-position:center; padding-top:64px;">enviar capa</label>
+              <input type="file" id="capa" accept="image/*" style="display:none;">
+            </div>
+
+            <div class="card painel">
+              <span class="eyebrow">GALERIA ADICIONAL</span>
+              <div class="grade-tres" style="gap:8px;">
+                <div class="area-upload" style="padding:24px 0;">+</div>
+                <div class="area-upload" style="padding:24px 0;">+</div>
+                <div class="area-upload" style="padding:24px 0;">+</div>
+              </div>
+            </div>
+
+            <div class="card painel">
+              <button type="button" class="botao botao-secundario botao-bloco" id="btn-rascunho" style="border:1px solid var(--texto-titulo);">Salvar rascunho</button>
+              <button type="button" class="botao botao-secundario botao-bloco" id="btn-previa" style="border:1px solid var(--texto-titulo);">Pré-visualizar</button>
+              <button type="submit" class="botao botao-escuro botao-bloco" style="margin-bottom:0;">Publicar campanha</button>
+            </div>
+          </div>
+
+        </div>
+      </form>
+
+      <dialog class="modal" id="modal-previa" style="max-width:360px;">
+        <h3>Pré-visualização</h3>
+        <div id="previa-card"></div>
+        <div class="botoes-modal"><button type="button" class="botao botao-escuro" id="fechar-previa" style="border:none;">Fechar</button></div>
+      </dialog>
+
+    </main>
+  </div>
+
+  <script src="../js/dados.js"></script>
+  <script>
+    var campanhas = carregarCampanhasOng();
+    var idEdicao = new URLSearchParams(window.location.search).get('editar');
+    var editando = idEdicao ? campanhas.find(function (c) { return c.id === Number(idEdicao); }) : null;
+    var imagemCapa = '';
+
+    var chips = document.querySelectorAll('#chips .chip');
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () { chip.classList.toggle('marcado'); });
+    });
+
+    // Modo edição: preenche o formulário com a campanha escolhida
+    if (editando) {
+      document.title = 'Editar Campanha | BemVida+';
+      document.getElementById('titulo-pagina').textContent = 'Editar Campanha';
+      document.getElementById('titulo').value = editando.titulo;
+      document.getElementById('categoria').value = editando.categoria;
+      document.getElementById('meta').value = editando.meta;
+      document.getElementById('inicio').value = editando.inicio || '';
+      document.getElementById('fim').value = editando.fim || '';
+      document.getElementById('descricao').value = editando.descricao || '';
+      chips.forEach(function (chip) {
+        if ((editando.itens || []).indexOf(chip.textContent) !== -1) chip.classList.add('marcado');
+      });
+    }
+
+    // Mostra a capa escolhida
+    document.getElementById('capa').addEventListener('change', function () {
+      var arquivo = this.files[0];
+      if (!arquivo) return;
+      var leitor = new FileReader();
+      leitor.onload = function () {
+        imagemCapa = leitor.result;
+        var caixa = document.getElementById('previa-capa');
+        caixa.style.backgroundImage = 'url(' + imagemCapa + ')';
+        caixa.textContent = '';
+      };
+      leitor.readAsDataURL(arquivo);
+    });
+
+    function lerFormulario(status) {
+      var marcados = [];
+      chips.forEach(function (chip) { if (chip.classList.contains('marcado')) marcados.push(chip.textContent); });
+      return {
+        titulo: document.getElementById('titulo').value.trim(),
+        categoria: document.getElementById('categoria').value,
+        meta: Number(document.getElementById('meta').value),
+        inicio: document.getElementById('inicio').value,
+        fim: document.getElementById('fim').value,
+        descricao: document.getElementById('descricao').value.trim(),
+        itens: marcados,
+        status: status
+      };
+    }
+
+    // Retorna true se estiver tudo certo; senão mostra as mensagens de erro
+    function validar(d, exigirTudo) {
+      function erro(id, mostrar) { document.getElementById(id).style.display = mostrar ? 'block' : 'none'; }
+      var ok = true;
+      var semTitulo = d.titulo === '';
+      erro('erro-titulo', semTitulo); if (semTitulo) ok = false;
+      if (exigirTudo) {
+        var semCat = d.categoria === '';
+        var metaRuim = !(d.meta > 0);
+        erro('erro-categoria', semCat); erro('erro-meta', metaRuim);
+        if (semCat || metaRuim) ok = false;
+      }
+      var datasRuins = d.inicio && d.fim && d.fim < d.inicio;
+      erro('erro-fim', datasRuins); if (datasRuins) ok = false;
+      return ok;
+    }
+
+    function salvar(status) {
+      var d = lerFormulario(status);
+      if (!validar(d, status === 'Ativa')) return;
+
+      if (editando) {
+        // mantém recebidos/doadores e o status atual ao editar uma campanha existente
+        Object.assign(editando, d, { status: status === 'Rascunho' ? editando.status : (editando.status === 'Rascunho' ? 'Ativa' : editando.status) });
+      } else {
+        var novoId = campanhas.reduce(function (m, c) { return Math.max(m, c.id); }, 0) + 1;
+        campanhas.unshift(Object.assign({ id: novoId, recebidos: 0, doadores: 0 }, d));
+      }
+      salvarCampanhasOng(campanhas);
+      mostrarAviso(status === 'Rascunho' ? 'Rascunho salvo.' : 'Campanha publicada!');
+      setTimeout(function () { window.location.href = 'minhas-campanhas.html'; }, 900);
+    }
+
+    document.getElementById('form-campanha').addEventListener('submit', function (e) {
+      e.preventDefault();
+      salvar('Ativa');
+    });
+    document.getElementById('btn-rascunho').addEventListener('click', function () { salvar('Rascunho'); });
+
+    // Pré-visualização: usa o mesmo card da listagem pública
+    document.getElementById('btn-previa').addEventListener('click', function () {
+      var d = lerFormulario('Ativa');
+      var c = { id: 0, titulo: d.titulo || 'Título da campanha', categoria: d.categoria || 'outros',
+                recebidos: 0, meta: d.meta || 100, imagem: 'previa.jpg' };
+      document.getElementById('previa-card').innerHTML = htmlCard(c);
+      if (imagemCapa) {
+        document.querySelector('#previa-card .capa').style.backgroundImage = 'url(' + imagemCapa + ')';
+        document.querySelector('#previa-card .capa').style.backgroundSize = 'cover';
+      }
+      document.getElementById('modal-previa').showModal();
+    });
+    document.getElementById('fechar-previa').addEventListener('click', function () {
+      document.getElementById('modal-previa').close();
+    });
+  </script>
+
+</body>
+</html>

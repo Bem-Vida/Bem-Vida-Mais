@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Perfil | BemVida+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout-logado">
+
+    <aside class="sidebar">
+      <a href="../index.html" class="logo"><img src="../img/logo.png" alt="BemVida+"> BemVida+</a>
+      <span class="rotulo-perfil">DOADOR</span>
+      <nav class="menu-lateral">
+        <a href="area.html">Minha Área</a>
+        <a href="minhas-doacoes.html">Minhas Doações</a>
+        <a href="meu-perfil.html" class="ativo">Meu Perfil</a>
+        <a href="../index.html">Sair</a>
+      </nav>
+    </aside>
+
+    <main class="conteudo-principal">
+
+      <div class="cabecalho-area">
+        <div>
+          <span class="eyebrow">USUÁRIO</span>
+          <h1 style="font-size:1.4rem; margin-bottom:0;">Meu Perfil</h1>
+        </div>
+        <div class="info-usuario">
+          <span style="color: var(--texto-secundario); font-size: 0.9rem;">Maria Silva</span>
+          <div class="avatar-circulo"></div>
+        </div>
+      </div>
+
+      <form id="form-perfil" novalidate>
+
+        <div class="card painel">
+          <span class="eyebrow">DADOS PESSOAIS</span>
+          <div class="linha-avatar">
+            <div class="avatar-grande"></div>
+            <a href="#" class="link-sair">alterar foto</a>
+          </div>
+
+          <div class="campo-formulario">
+            <label for="nome">Nome completo</label>
+            <input type="text" id="nome" value="Maria Silva">
+          </div>
+          <div class="grade-formulario">
+            <div class="campo-formulario">
+              <label for="cpf">CPF</label>
+              <input type="text" id="cpf" value="000.000.000-00">
+            </div>
+            <div class="campo-formulario">
+              <label for="telefone">Telefone</label>
+              <input type="text" id="telefone" value="(00) 00000-0000">
+            </div>
+          </div>
+          <div class="campo-formulario" style="margin-bottom:0;">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" value="maria@exemplo.com">
+          </div>
+        </div>
+
+        <div class="card painel">
+          <span class="eyebrow">ALTERAR SENHA</span>
+          <div class="grade-tres">
+            <div class="campo-formulario" style="margin-bottom:0;">
+              <label for="senha-atual">Senha atual</label>
+              <input type="password" id="senha-atual" placeholder="senha atual">
+            </div>
+            <div class="campo-formulario" style="margin-bottom:0;">
+              <label for="senha-nova">Nova senha</label>
+              <input type="password" id="senha-nova" placeholder="nova senha">
+            </div>
+            <div class="campo-formulario" style="margin-bottom:0;">
+              <label for="senha-confirmar">Confirmar nova senha</label>
+              <input type="password" id="senha-confirmar" placeholder="confirmar">
+              <div class="erro-campo" id="erro-senha">As senhas não coincidem.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <button type="submit" class="botao botao-escuro" style="border:none;">Salvar alterações</button>
+          <a href="../index.html" class="link-sair">Sair da conta</a>
+        </div>
+      </form>
+
+    </main>
+  </div>
+
+  <script src="../js/dados.js"></script>
+  <script>
+    // Salvar: só valida a troca de senha (se foi preenchida) e mostra um aviso.
+    document.getElementById('form-perfil').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var nova = document.getElementById('senha-nova').value;
+      var conf = document.getElementById('senha-confirmar').value;
+      var erro = document.getElementById('erro-senha');
+
+      if (nova !== conf) {
+        erro.style.display = 'block';
+        return;
+      }
+      erro.style.display = 'none';
+      mostrarAviso('Alterações salvas.');
+    });
+  </script>
+
+</body>
+</html>

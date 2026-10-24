@@ -29,7 +29,7 @@
       <h1>Registrar intenção de doação</h1>
 
       <div class="card" style="padding:32px; max-width:640px;">
-        <p style="margin-bottom:20px;">Campanha: <strong style="color:var(--texto-titulo);">Cestas para famílias</strong></p>
+        <p style="margin-bottom:20px;">Campanha: <strong style="color:var(--texto-titulo);" id="nome-campanha"></strong></p>
 
         <!-- No protótipo estático o formulário não envia dados de verdade.
              Ele só leva para a tela de confirmação. -->
@@ -74,6 +74,12 @@
   <footer class="rodape">
     [ links institucionais · contato · termos ]
   </footer>
+
+  <script src="js/dados.js"></script>
+  <script>
+    var c = acharCampanha(new URLSearchParams(window.location.search).get('id')) || CAMPANHAS[0];
+    document.getElementById('nome-campanha').textContent = c.titulo;
+  </script>
 
 </body>
 </html>

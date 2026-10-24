@@ -10,6 +10,11 @@
    7. Formulários
    8. Área logada (sidebar + painel)
    9. Responsivo
+   10. Telas de autenticação
+   11. Capas de campanha (imagem com fallback)
+   12. Listagem de campanhas (filtros, paginação)
+   13. Tabelas, status e modal (áreas Doador e ONG)
+   14. Formulários da área logada
    ========================================================================== */
 
 /* 1. Variáveis
@@ -325,7 +330,7 @@ hr {
   min-height: 100vh;
 }
 
-.sidebar-doador {
+.sidebar {
   width: 240px;
   flex-shrink: 0;
   background: linear-gradient(180deg, var(--verde-principal), var(--azul-turquesa));
@@ -333,14 +338,14 @@ hr {
   padding: 24px 16px;
 }
 
-.sidebar-doador .logo {
+.sidebar .logo {
   color: var(--branco);
   margin-bottom: 24px;
   display: block;
   padding: 0 8px;
 }
 
-.sidebar-doador .rotulo-perfil {
+.sidebar .rotulo-perfil {
   font-size: 0.7rem;
   letter-spacing: 0.05em;
   opacity: 0.75;
@@ -448,7 +453,7 @@ hr {
     flex-direction: column;
   }
 
-  .sidebar-doador {
+  .sidebar {
     width: 100%;
   }
 
@@ -547,4 +552,388 @@ hr {
   color: var(--texto-secundario);
   margin-bottom: 24px;
   text-align: left;
+}
+
+
+/* ==========================================================================
+   11. Capas de campanha
+   A imagem fica por cima de um fundo em gradiente. Se o arquivo da foto
+   ainda não existir, o JS/HTML remove a <img> e o gradiente + rótulo aparecem.
+   ========================================================================== */
+.capa {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--raio);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--branco);
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, var(--verde-principal), var(--azul-turquesa));
+}
+
+.capa img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.capa-alimentos { background: linear-gradient(135deg, #0E7E52, #10A153); }
+.capa-roupas    { background: linear-gradient(135deg, #2A93A6, #258F63); }
+.capa-higiene   { background: linear-gradient(135deg, #2A93A6, #0E7E52); }
+.capa-outros    { background: linear-gradient(135deg, #E8615A, #2A93A6); }
+
+.card-campanha .capa {
+  height: 140px;
+  margin-bottom: 12px;
+}
+
+/* ==========================================================================
+   12. Listagem de campanhas
+   ========================================================================== */
+.barra-filtros {
+  display: grid;
+  grid-template-columns: 1fr 180px 200px auto;
+  gap: 16px;
+  align-items: end;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+
+.barra-filtros .campo-formulario {
+  margin-bottom: 0;
+}
+
+.contador-resultados {
+  font-size: 0.85rem;
+  color: var(--texto-secundario);
+  margin-bottom: 16px;
+}
+
+.grade-campanhas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.vazio {
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--texto-placeholder);
+  grid-column: 1 / -1;
+}
+
+.paginacao {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.paginacao button {
+  min-width: 36px;
+  height: 36px;
+  border: 1px solid var(--borda);
+  background: var(--branco);
+  border-radius: var(--raio);
+  font-family: var(--fonte-texto);
+  cursor: pointer;
+}
+
+.paginacao button.ativo {
+  background: var(--texto-titulo);
+  color: var(--branco);
+  border-color: var(--texto-titulo);
+}
+
+.paginacao button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ==========================================================================
+   13. Tabelas, status e modal
+   ========================================================================== */
+.tabela-wrap {
+  background: var(--branco);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  overflow-x: auto;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.tabela th {
+  text-align: left;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--texto-secundario);
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--borda);
+  white-space: nowrap;
+}
+
+.tabela td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--borda);
+  vertical-align: middle;
+}
+
+.tabela tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela td small {
+  display: block;
+  color: var(--texto-placeholder);
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+.celula-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.botao-mini {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  border: 1px solid var(--texto-titulo);
+  background: var(--branco);
+  color: var(--texto-titulo);
+  font-family: var(--fonte-texto);
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.botao-mini.perigo {
+  border-color: var(--coral-destaque);
+  color: var(--coral-destaque);
+}
+
+.botao-mini.confirmar {
+  background: var(--verde-acao);
+  border-color: var(--verde-acao);
+  color: var(--branco);
+}
+
+.status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--raio-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--texto-secundario);
+  color: var(--texto-secundario);
+  white-space: nowrap;
+}
+
+.status-confirmada,
+.status-ativa {
+  background: var(--verde-claro);
+  border-color: var(--verde-claro);
+  color: var(--branco);
+}
+
+.status-cancelada {
+  border-color: var(--coral-destaque);
+  color: var(--coral-destaque);
+}
+
+.status-encerrada {
+  background: var(--texto-secundario);
+  border-color: var(--texto-secundario);
+  color: var(--branco);
+}
+
+.barra-ferramentas {
+  display: flex;
+  gap: 16px;
+  align-items: end;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.barra-ferramentas .campo-formulario {
+  margin-bottom: 0;
+}
+
+.barra-ferramentas .busca {
+  flex: 1;
+}
+
+.barra-ferramentas select {
+  min-width: 160px;
+}
+
+/* Modal (elemento <dialog> nativo) */
+dialog.modal {
+  border: none;
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 400px;
+  width: calc(100% - 32px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+dialog.modal::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+dialog.modal h3 {
+  font-size: 1.1rem;
+}
+
+dialog.modal .botoes-modal {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.aviso-flutuante {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--texto-titulo);
+  color: var(--branco);
+  padding: 12px 18px;
+  border-radius: var(--raio);
+  font-size: 0.88rem;
+  z-index: 50;
+}
+
+/* ==========================================================================
+   14. Formulários da área logada
+   ========================================================================== */
+.grade-duas-colunas {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.painel {
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.painel > .eyebrow {
+  margin-bottom: 16px;
+}
+
+.avatar-grande {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: var(--input-bg);
+  border: 1px solid var(--borda);
+  flex-shrink: 0;
+}
+
+.linha-avatar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.grade-tres {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.grade-quatro {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.area-upload {
+  border: 1px dashed var(--texto-placeholder);
+  background: var(--input-bg);
+  border-radius: var(--raio);
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--texto-secundario);
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.lista-documentos .item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  margin-bottom: 8px;
+  font-size: 0.88rem;
+}
+
+.lista-documentos .item span {
+  color: var(--texto-placeholder);
+}
+
+/* Chips selecionáveis (itens necessários) */
+.chip {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  background: var(--branco);
+  font-family: var(--fonte-texto);
+  font-size: 0.88rem;
+  margin: 0 8px 8px 0;
+  cursor: pointer;
+}
+
+.chip.marcado {
+  background: var(--verde-claro);
+  border-color: var(--verde-claro);
+  color: var(--branco);
+}
+
+.erro-campo {
+  color: var(--coral-destaque);
+  font-size: 0.8rem;
+  margin-top: 4px;
+  display: none;
+}
+
+.link-sair {
+  color: var(--texto-secundario);
+  font-size: 0.88rem;
+  text-decoration: underline;
+}
+
+@media (max-width: 860px) {
+  .barra-filtros,
+  .grade-campanhas,
+  .grade-duas-colunas,
+  .grade-tres,
+  .grade-quatro {
+    grid-template-columns: 1fr;
+  }
+
+  .barra-ferramentas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .conteudo-principal {
+    padding: 24px 16px;
+  }
 }

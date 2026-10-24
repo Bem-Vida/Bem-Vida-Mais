@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de ONG | BemVida+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="cabecalho-publico">
+    <a href="index.html" class="logo"><img src="img/logo.png" alt="BemVida+"> BemVida+</a>
+    <nav class="nav-publica">
+      <a href="index.html">Início</a>
+      <a href="quem-somos.html">Quem Somos</a>
+      <a href="campanhas.html">Campanhas</a>
+    </nav>
+    <div class="acoes-cabecalho">
+      <a href="login.html" class="botao botao-secundario">Login</a>
+      <a href="cadastro.html" class="botao botao-escuro">Cadastro</a>
+    </div>
+  </header>
+
+  <section class="pagina-auth">
+    <div class="cartao-auth" style="max-width:560px;" id="cartao">
+      <img src="img/logo.png" alt="BemVida+" class="icone-auth">
+      <span class="eyebrow">ONG</span>
+      <h1>Cadastro de ONG</h1>
+      <p class="aviso-cadastro-ong">Após o cadastro, a ONG fica com status "Pendente" até validação pelo administrador.</p>
+
+      <form id="form-ong">
+        <div class="campo-formulario">
+          <label for="nome">Nome da ONG</label>
+          <input type="text" id="nome" placeholder="Nome da ONG" required>
+        </div>
+        <div class="grade-formulario">
+        <div class="campo-formulario">
+          <label for="cnpj">CNPJ</label>
+          <input type="text" id="cnpj" placeholder="00.000.000/0001-00" required>
+        </div>
+        <div class="campo-formulario">
+          <label for="telefone">Telefone</label>
+          <input type="text" id="telefone" placeholder="(00) 0000-0000" required>
+        </div>
+        <div class="campo-formulario">
+          <label for="email">E-mail institucional</label>
+          <input type="email" id="email" placeholder="contato@ong.org" required>
+        </div>
+        <div class="campo-formulario">
+          <label for="area">Área de atuação</label>
+          <input type="text" id="area" placeholder="Assistência social" required>
+        </div>
+        </div>
+        <div class="campo-formulario">
+          <label for="endereco">Endereço</label>
+          <input type="text" id="endereco" placeholder="Rua, número, bairro, cidade — UF" required>
+        </div>
+        <div class="campo-formulario">
+          <label>Documento de constituição</label>
+          <label class="area-upload" for="documento" id="rotulo-doc" style="display:block; font-weight:400; letter-spacing:0;">+ enviar estatuto ou documento de constituição</label>
+          <input type="file" id="documento" style="display:none;">
+        </div>
+        <div class="grade-formulario">
+          <div class="campo-formulario">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" placeholder="senha" required>
+          </div>
+          <div class="campo-formulario">
+            <label for="confirmar">Confirmar senha</label>
+            <input type="password" id="confirmar" placeholder="repita a senha" required>
+          </div>
+        </div>
+        <div class="erro-campo" id="erro" style="margin:-8px 0 12px;">As senhas não coincidem.</div>
+        <button type="submit" class="botao botao-primario botao-bloco">Enviar cadastro para validação</button>
+      </form>
+
+      <p class="rodape-auth">Já possui cadastro? <a href="login-ong.html">Faça login</a></p>
+    </div>
+  </section>
+
+  <footer class="rodape">
+    [ links institucionais · contato · termos ]
+  </footer>
+
+  <script>
+    // Mostra o nome do arquivo escolhido no lugar do texto do botão de upload
+    document.getElementById('documento').addEventListener('change', function () {
+      if (this.files.length) document.getElementById('rotulo-doc').textContent = this.files[0].name;
+    });
+
+    // Ao enviar: confere as senhas e troca o cartão por uma mensagem de "pendente"
+    document.getElementById('form-ong').addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (document.getElementById('senha').value !== document.getElementById('confirmar').value) {
+        document.getElementById('erro').style.display = 'block';
+        return;
+      }
+      document.getElementById('cartao').innerHTML =
+        '<img src="img/logo.png" alt="BemVida+" class="icone-auth">' +
+        '<span class="eyebrow">CADASTRO ENVIADO</span>' +
+        '<h1>Cadastro em análise</h1>' +
+        '<p>Sua ONG está com status <strong>Pendente</strong>. Assim que o administrador validar os documentos, você poderá acessar a área da ONG.</p>' +
+        '<a href="login-ong.html" class="botao botao-escuro">Ir para o login</a>';
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acesso da ONG | BemVida+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="cabecalho-publico">
+    <a href="index.html" class="logo"><img src="img/logo.png" alt="BemVida+"> BemVida+</a>
+    <nav class="nav-publica">
+      <a href="index.html">Início</a>
+      <a href="quem-somos.html">Quem Somos</a>
+      <a href="campanhas.html">Campanhas</a>
+    </nav>
+    <div class="acoes-cabecalho">
+      <a href="login.html" class="botao botao-secundario">Login</a>
+      <a href="cadastro.html" class="botao botao-escuro">Cadastro</a>
+    </div>
+  </header>
+
+  <section class="pagina-auth">
+    <div class="cartao-auth">
+      <img src="img/logo.png" alt="BemVida+" class="icone-auth">
+      <span class="eyebrow">ONG</span>
+      <h1>Acesso da ONG</h1>
+      <p class="subtitulo-auth">Entre para gerenciar campanhas e doações recebidas.</p>
+
+      <!-- Protótipo: o formulário não autentica, só leva à Área da ONG. -->
+      <form action="ong/area.html">
+        <div class="campo-formulario">
+          <label for="email">E-mail institucional</label>
+          <input type="email" id="email" placeholder="contato@ong.org">
+        </div>
+        <div class="campo-formulario">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" placeholder="senha">
+        </div>
+        <p style="text-align:right; margin:-8px 0 16px;"><a href="#" class="link-sair">Esqueci minha senha</a></p>
+        <button type="submit" class="botao botao-primario botao-bloco">Entrar</button>
+      </form>
+
+      <p class="rodape-auth">ONG ainda não cadastrada? <a href="cadastro-ong.html">Cadastre-se</a></p>
+      <p class="rodape-auth" style="margin-top:8px;">Quer doar? <a href="login.html">Entrar como doador</a></p>
+    </div>
+  </section>
+
+  <footer class="rodape">
+    [ links institucionais · contato · termos ]
+  </footer>
+
+</body>
+</html>

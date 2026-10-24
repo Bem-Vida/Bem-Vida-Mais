@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minhas Campanhas | BemVida+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout-logado">
+
+    <aside class="sidebar">
+      <a href="../index.html" class="logo"><img src="../img/logo.png" alt="BemVida+"> BemVida+</a>
+      <span class="rotulo-perfil">ONG</span>
+      <nav class="menu-lateral">
+        <a href="area.html">Minha Área</a>
+        <a href="minhas-campanhas.html" class="ativo">Minhas Campanhas</a>
+        <a href="nova-campanha.html">Nova Campanha</a>
+        <a href="doacoes-recebidas.html">Doações Recebidas</a>
+        <a href="perfil-ong.html">Perfil da ONG</a>
+        <a href="../index.html">Sair</a>
+      </nav>
+    </aside>
+
+    <main class="conteudo-principal">
+
+      <div class="cabecalho-area">
+        <div>
+          <span class="eyebrow">ONG</span>
+          <h1 style="font-size:1.4rem; margin-bottom:0;" id="titulo-pagina">Minhas Campanhas</h1>
+        </div>
+        <div class="info-usuario">
+          <span style="color: var(--texto-secundario); font-size: 0.9rem;">Associação Mãos Amigas</span>
+          <div class="avatar-circulo"></div>
+        </div>
+      </div>
+
+      <div class="grade-quatro">
+        <div class="card card-resumo">
+          <span class="eyebrow">CAMPANHAS ATIVAS</span>
+          <div class="valor" id="r-ativas"></div>
+        </div>
+        <div class="card card-resumo">
+          <span class="eyebrow">TOTAL DE ITENS RECEBIDOS</span>
+          <div class="valor" id="r-itens"></div>
+        </div>
+        <div class="card card-resumo">
+          <span class="eyebrow">DOADORES ÚNICOS</span>
+          <div class="valor" id="r-doadores"></div>
+        </div>
+        <div class="card card-resumo">
+          <span class="eyebrow">META TOTAL DE ITENS</span>
+          <div class="valor" id="r-meta"></div>
+        </div>
+      </div>
+
+      <div class="card barra-ferramentas">
+        <div class="campo-formulario busca">
+          <input type="text" id="busca" placeholder="Buscar campanha">
+        </div>
+        <div class="campo-formulario">
+          <select id="filtro-status">
+            <option value="todos">Todos</option>
+            <option>Ativa</option>
+            <option>Pausada</option>
+            <option>Encerrada</option>
+            <option>Cancelada</option>
+            <option>Rascunho</option>
+          </select>
+        </div>
+        <a href="nova-campanha.html" class="botao botao-escuro">+ Nova Campanha</a>
+      </div>
+
+      <div class="tabela-wrap">
+        <table class="tabela">
+          <thead>
+            <tr><th>CAMPANHA</th><th>STATUS</th><th>ITENS RECEBIDOS</th><th>META DE ITENS</th><th>DOADORES</th><th>AÇÕES</th></tr>
+          </thead>
+          <tbody id="tabela"></tbody>
+        </table>
+      </div>
+
+      <dialog class="modal" id="modal-cancelar">
+        <h3>Cancelar esta campanha?</h3>
+        <p id="modal-texto"></p>
+        <div class="botoes-modal">
+          <button type="button" class="botao botao-secundario" id="modal-voltar">Voltar</button>
+          <button type="button" class="botao botao-escuro" id="modal-confirmar" style="border:none;">Cancelar campanha</button>
+        </div>
+      </dialog>
+
+    </main>
+  </div>
+
+  <script src="../js/dados.js"></script>
+  <script>
+    // Calcula os números dos cards a partir da lista de campanhas
+    function resumoCampanhas(lista) {
+      var ativas = lista.filter(function (c) { return c.status === 'Ativa'; }).length;
+      var itens = 0, doadores = 0, meta = 0;
+      lista.forEach(function (c) { itens += c.recebidos; doadores += c.doadores; meta += c.meta; });
+      return { ativas: ativas, itens: itens, doadores: doadores, meta: meta };
+    }
+
+    var campanhas = carregarCampanhasOng();
+    var idParaCancelar = null;
+
+    function desenhar() {
+      var r = resumoCampanhas(campanhas);
+      document.getElementById('r-ativas').textContent = String(r.ativas).padStart(2, '0');
+      document.getElementById('r-itens').textContent = r.itens + ' itens';
+      document.getElementById('r-doadores').textContent = r.doadores;
+      document.getElementById('r-meta').textContent = r.meta + ' itens';
+
+      var texto = document.getElementById('busca').value.trim().toLowerCase();
+      var status = document.getElementById('filtro-status').value;
+
+      var linhas = campanhas.filter(function (c) {
+        return c.titulo.toLowerCase().indexOf(texto) !== -1 && (status === 'todos' || c.status === status);
+      }).map(function (c) {
+        var botoes = '<a href="nova-campanha.html?editar=' + c.id + '" class="botao-mini">Editar</a>';
+        if (c.status === 'Ativa')   botoes += '<button class="botao-mini" data-acao="pausar" data-id="' + c.id + '">Pausar</button>';
+        if (c.status === 'Pausada') botoes += '<button class="botao-mini" data-acao="retomar" data-id="' + c.id + '">Retomar</button>';
+        if (c.status === 'Ativa' || c.status === 'Pausada') {
+          botoes += '<button class="botao-mini perigo" data-acao="cancelar" data-id="' + c.id + '">Cancelar</button>';
+        }
+        return '<tr><td><strong>' + c.titulo + '</strong></td>' +
+          '<td><span class="status status-' + c.status.toLowerCase() + '">' + c.status + '</span></td>' +
+          '<td>' + c.recebidos + ' itens</td><td>' + c.meta + ' itens</td><td>' + c.doadores + '</td>' +
+          '<td><div class="celula-acoes">' + botoes + '</div></td></tr>';
+      });
+
+      document.getElementById('tabela').innerHTML = linhas.length
+        ? linhas.join('')
+        : '<tr><td colspan="6" class="vazio">Nenhuma campanha encontrada.</td></tr>';
+    }
+
+    function mudarStatus(id, novo) {
+      campanhas.find(function (c) { return c.id === id; }).status = novo;
+      salvarCampanhasOng(campanhas);
+      desenhar();
+    }
+
+    var modal = document.getElementById('modal-cancelar');
+    document.getElementById('tabela').addEventListener('click', function (e) {
+      var acao = e.target.getAttribute('data-acao');
+      if (!acao) return;
+      var id = Number(e.target.getAttribute('data-id'));
+      if (acao === 'pausar')  { mudarStatus(id, 'Pausada'); mostrarAviso('Campanha pausada.'); }
+      if (acao === 'retomar') { mudarStatus(id, 'Ativa');   mostrarAviso('Campanha retomada.'); }
+      if (acao === 'cancelar') {
+        idParaCancelar = id;
+        document.getElementById('modal-texto').textContent =
+          '"' + campanhas.find(function (c) { return c.id === id; }).titulo + '" deixará de aparecer para os doadores.';
+        modal.showModal();
+      }
+    });
+    document.getElementById('modal-voltar').addEventListener('click', function () { modal.close(); });
+    document.getElementById('modal-confirmar').addEventListener('click', function () {
+      modal.close();
+      mudarStatus(idParaCancelar, 'Cancelada');
+      mostrarAviso('Campanha cancelada.');
+    });
+
+    document.getElementById('busca').addEventListener('input', desenhar);
+    document.getElementById('filtro-status').addEventListener('change', desenhar);
+    desenhar();
+  </script>
+
+</body>
+</html>

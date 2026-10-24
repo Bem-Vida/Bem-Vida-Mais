@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Área | BemVida+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout-logado">
+
+    <aside class="sidebar">
+      <a href="../index.html" class="logo"><img src="../img/logo.png" alt="BemVida+"> BemVida+</a>
+      <span class="rotulo-perfil">ONG</span>
+      <nav class="menu-lateral">
+        <a href="area.html" class="ativo">Minha Área</a>
+        <a href="minhas-campanhas.html">Minhas Campanhas</a>
+        <a href="nova-campanha.html">Nova Campanha</a>
+        <a href="doacoes-recebidas.html">Doações Recebidas</a>
+        <a href="perfil-ong.html">Perfil da ONG</a>
+        <a href="../index.html">Sair</a>
+      </nav>
+    </aside>
+
+    <main class="conteudo-principal">
+
+      <div class="cabecalho-area">
+        <div>
+          <span class="eyebrow">ONG</span>
+          <h1 style="font-size:1.4rem; margin-bottom:0;" id="titulo-pagina">Minha Área</h1>
+        </div>
+        <div class="info-usuario">
+          <span style="color: var(--texto-secundario); font-size: 0.9rem;">Associação Mãos Amigas</span>
+          <div class="avatar-circulo"></div>
+        </div>
+      </div>
+
+      <div class="grade-resumo">
+        <div class="card card-resumo">
+          <span class="eyebrow">CAMPANHAS ATIVAS</span>
+          <div class="valor" id="r-ativas"></div>
+        </div>
+        <div class="card card-resumo">
+          <span class="eyebrow">TOTAL DE ITENS RECEBIDOS</span>
+          <div class="valor" id="r-itens"></div>
+        </div>
+        <div class="card card-resumo">
+          <span class="eyebrow">DOADORES ÚNICOS</span>
+          <div class="valor" id="r-doadores"></div>
+        </div>
+      </div>
+
+      <span class="eyebrow">ACESSO RÁPIDO</span>
+      <h2 style="font-size:1.05rem; margin-bottom:16px;">Atalhos</h2>
+      <div class="grade-atalhos">
+        <a href="minhas-campanhas.html" class="card-atalho">
+          <strong>Minhas Campanhas →</strong>
+          <span>gerencie campanhas e metas de itens</span>
+        </a>
+        <a href="nova-campanha.html" class="card-atalho">
+          <strong>Nova Campanha →</strong>
+          <span>crie uma nova arrecadação de itens</span>
+        </a>
+      </div>
+
+      <div class="card" style="padding:20px;">
+        <span class="eyebrow">ATIVIDADE RECENTE</span>
+        <p style="margin:0 0 8px;">28/09/2026 — Nova intenção de doação em <strong>Cestas para famílias</strong>.</p>
+        <p style="margin:0 0 8px;">27/09/2026 — Você confirmou o recebimento em <strong>Agasalhos para o inverno</strong>.</p>
+        <p style="margin:0;">25/09/2026 — Nova intenção de doação em <strong>Kits de cuidado pessoal</strong>.</p>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../js/dados.js"></script>
+  <script>
+    // Calcula os números dos cards a partir da lista de campanhas
+    function resumoCampanhas(lista) {
+      var ativas = lista.filter(function (c) { return c.status === 'Ativa'; }).length;
+      var itens = 0, doadores = 0, meta = 0;
+      lista.forEach(function (c) { itens += c.recebidos; doadores += c.doadores; meta += c.meta; });
+      return { ativas: ativas, itens: itens, doadores: doadores, meta: meta };
+    }
+
+    var r = resumoCampanhas(carregarCampanhasOng());
+    document.getElementById('r-ativas').textContent = r.ativas + (r.ativas === 1 ? ' campanha' : ' campanhas');
+    document.getElementById('r-itens').textContent = r.itens + ' itens';
+    document.getElementById('r-doadores').textContent = r.doadores + ' doadores';
+  </script>
+
+</body>
+</html>

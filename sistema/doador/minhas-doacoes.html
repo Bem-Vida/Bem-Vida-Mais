@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minhas Doações | BemVida+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout-logado">
+
+    <aside class="sidebar">
+      <a href="../index.html" class="logo"><img src="../img/logo.png" alt="BemVida+"> BemVida+</a>
+      <span class="rotulo-perfil">DOADOR</span>
+      <nav class="menu-lateral">
+        <a href="area.html">Minha Área</a>
+        <a href="minhas-doacoes.html" class="ativo">Minhas Doações</a>
+        <a href="meu-perfil.html">Meu Perfil</a>
+        <a href="../index.html">Sair</a>
+      </nav>
+    </aside>
+
+    <main class="conteudo-principal">
+
+      <div class="cabecalho-area">
+        <div>
+          <span class="eyebrow">USUÁRIO</span>
+          <h1 style="font-size:1.4rem; margin-bottom:0;">Minhas Doações</h1>
+        </div>
+        <div class="info-usuario">
+          <span style="color: var(--texto-secundario); font-size: 0.9rem;">Maria Silva</span>
+          <div class="avatar-circulo"></div>
+        </div>
+      </div>
+
+      <div class="grade-resumo">
+        <div class="card card-resumo">
+          <span class="eyebrow">TOTAL DE DOAÇÕES</span>
+          <div class="valor" id="r-total"></div>
+        </div>
+        <div class="card card-resumo">
+          <span class="eyebrow">AGUARDANDO CONFIRMAÇÃO</span>
+          <div class="valor" id="r-aguardando"></div>
+        </div>
+        <div class="card card-resumo">
+          <span class="eyebrow">CONFIRMADAS PELA ONG</span>
+          <div class="valor" id="r-confirmadas"></div>
+        </div>
+      </div>
+
+      <div class="card barra-ferramentas">
+        <div class="campo-formulario busca">
+          <input type="text" id="busca" placeholder="buscar por campanha ou item">
+        </div>
+        <div class="campo-formulario">
+          <select id="filtro-status">
+            <option value="todas">Todas</option>
+            <option value="Aguardando">Aguardando</option>
+            <option value="Confirmada">Confirmada</option>
+            <option value="Cancelada">Cancelada</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tabela-wrap">
+        <table class="tabela">
+          <thead>
+            <tr><th>CAMPANHA</th><th>ITENS DOADOS</th><th>QTD.</th><th>DATA</th><th>STATUS</th><th>AÇÕES</th></tr>
+          </thead>
+          <tbody id="tabela"></tbody>
+        </table>
+      </div>
+
+      <!-- Janela de confirmação do cancelamento -->
+      <dialog class="modal" id="modal-cancelar">
+        <h3>Cancelar esta doação?</h3>
+        <p id="modal-texto"></p>
+        <div class="botoes-modal">
+          <button type="button" class="botao botao-secundario" id="modal-voltar">Voltar</button>
+          <button type="button" class="botao botao-escuro" id="modal-confirmar" style="border:none;">Cancelar doação</button>
+        </div>
+      </dialog>
+
+    </main>
+  </div>
+
+  <script src="../js/dados.js"></script>
+  <script>
+    // Dados de exemplo das doações da usuária (campanhaId liga com js/dados.js)
+    var DOACOES = [
+      { id: 1, campanhaId: 1, itens: 'Alimentos não perecíveis', qtd: 10, data: '12/09/2026', status: 'Aguardando', quando: '' },
+      { id: 2, campanhaId: 2, itens: 'Casacos, Cachecóis',        qtd: 4,  data: '05/09/2026', status: 'Confirmada', quando: '08/09/2026' },
+      { id: 3, campanhaId: 3, itens: 'Sabonete, Escova de dentes', qtd: 12, data: '29/08/2026', status: 'Confirmada', quando: '02/09/2026' },
+      { id: 4, campanhaId: 4, itens: 'Frutas e legumes',          qtd: 8,  data: '20/08/2026', status: 'Aguardando', quando: '' },
+      { id: 5, campanhaId: 5, itens: 'Tênis',                     qtd: 3,  data: '10/08/2026', status: 'Confirmada', quando: '14/08/2026' },
+      { id: 6, campanhaId: 7, itens: 'Cobertores',                qtd: 2,  data: '01/08/2026', status: 'Cancelada',  quando: '' }
+    ];
+
+    var idParaCancelar = null;
+
+    function desenharResumo() {
+      var aguard = DOACOES.filter(function (d) { return d.status === 'Aguardando'; }).length;
+      var conf = DOACOES.filter(function (d) { return d.status === 'Confirmada'; }).length;
+      document.getElementById('r-total').textContent = DOACOES.length + ' doações';
+      document.getElementById('r-aguardando').textContent = aguard;
+      document.getElementById('r-confirmadas').textContent = conf;
+    }
+
+    function desenharTabela() {
+      var texto = document.getElementById('busca').value.trim().toLowerCase();
+      var status = document.getElementById('filtro-status').value;
+
+      var linhas = DOACOES.filter(function (d) {
+        var nome = acharCampanha(d.campanhaId).titulo;
+        var bateTexto = (nome + ' ' + d.itens).toLowerCase().indexOf(texto) !== -1;
+        return bateTexto && (status === 'todas' || d.status === status);
+      }).map(function (d) {
+        var c = acharCampanha(d.campanhaId);
+        var extra = d.status === 'Confirmada' ? '<small>confirmado pela ONG em ' + d.quando + '</small>' : '';
+        var botoes = '<a href="../campanha-detalhes.html?id=' + c.id + '" class="botao-mini">Ver campanha</a>';
+        if (d.status === 'Aguardando') {
+          botoes += '<button class="botao-mini perigo" data-cancelar="' + d.id + '">Cancelar doação</button>';
+        }
+        return '<tr><td><strong>' + c.titulo + '</strong></td><td>' + d.itens + '</td><td>' + d.qtd + ' itens</td><td>' + d.data +
+          '</td><td><span class="status status-' + d.status.toLowerCase() + '">' + d.status + '</span>' + extra +
+          '</td><td><div class="celula-acoes">' + botoes + '</div></td></tr>';
+      });
+
+      document.getElementById('tabela').innerHTML = linhas.length
+        ? linhas.join('')
+        : '<tr><td colspan="6" class="vazio">Nenhuma doação encontrada.</td></tr>';
+    }
+
+    document.getElementById('busca').addEventListener('input', desenharTabela);
+    document.getElementById('filtro-status').addEventListener('change', desenharTabela);
+
+    // Abre o modal ao clicar em "Cancelar doação"
+    var modal = document.getElementById('modal-cancelar');
+    document.getElementById('tabela').addEventListener('click', function (e) {
+      var id = e.target.getAttribute('data-cancelar');
+      if (!id) return;
+      idParaCancelar = Number(id);
+      var d = DOACOES.find(function (x) { return x.id === idParaCancelar; });
+      document.getElementById('modal-texto').textContent =
+        'Sua intenção de doar para "' + acharCampanha(d.campanhaId).titulo + '" será cancelada.';
+      modal.showModal();
+    });
+    document.getElementById('modal-voltar').addEventListener('click', function () { modal.close(); });
+    document.getElementById('modal-confirmar').addEventListener('click', function () {
+      DOACOES.find(function (x) { return x.id === idParaCancelar; }).status = 'Cancelada';
+      modal.close();
+      desenharResumo();
+      desenharTabela();
+      mostrarAviso('Doação cancelada.');
+    });
+
+    desenharResumo();
+    desenharTabela();
+  </script>
+
+</body>
+</html>
