@@ -1,19 +1,8 @@
-COLOQUE AS FOTOS DAS CAPAS AQUI (com exatamente estes nomes)
+Capas das campanhas (JPG 800x450, geradas por IA no Gemini e cortadas em 16:9).
+Se um arquivo for removido, o site mostra automaticamente um fundo colorido da categoria.
+Para trocar uma capa, substitua o arquivo mantendo o mesmo nome.
 
-Formato: JPG, proporcao 16:9, cerca de 800x450 px, ate ~100 KB cada.
-Use fotos livres (Unsplash, Pexels, Pixabay) e anote a fonte/autor no README do repositorio.
-Se um arquivo nao existir, o site mostra automaticamente um fundo colorido da categoria.
-
-cestas-familias.jpg        (Alimentos)  - cestas basicas / mantimentos
-agasalhos-inverno.jpg      (Roupas)     - casacos e roupas de frio dobrados
-kits-cuidado-pessoal.jpg   (Higiene)    - sabonete, escova, shampoo
-frutas-verduras.jpg        (Alimentos)  - caixa de frutas e verduras
-calcados-infantis.jpg      (Roupas)     - tenis/sapatos infantis
-fraldas-geriatricas.jpg    (Higiene)    - produtos de cuidado a idosos
-mantas-cobertores.jpg      (Outros)     - cobertores
-kits-limpeza.jpg           (Outros)     - produtos de limpeza
-roupas-de-cama.jpg         (Outros)     - lencois e toalhas
-
-Fora desta pasta (em sistema/img/):
-banner-home.jpg            - banner da pagina inicial (ex.: 1200x560)
-quem-somos.jpg             - imagem institucional da pagina Quem Somos (ex.: 800x400)
+cestas-familias.jpg  agasalhos-inverno.jpg  kits-cuidado-pessoal.jpg
+marmitas-solidarias.jpg  calcados-infantis.jpg  fraldas-infantis.jpg
+material-escolar.jpg  brinquedos-criancas.jpg  moveis-colchoes.jpg
+Em sistema/img/: banner-home.jpg e quem-somos.jpg
