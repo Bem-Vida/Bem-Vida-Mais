@@ -26,6 +26,7 @@ O BemVida+ centraliza informações sobre campanhas de doação e aproxima doado
 - **HTML5** — estrutura das páginas
 - **CSS3** — estilização e layout
 - **Git / GitHub** — versionamento e gerenciamento do código
+- **JavaScript** - Responsável por implementar a interatividade e as funcionalidades dinâmicas da plataforma.
 
 ---
 
@@ -67,7 +68,7 @@ Valida ONGs e associações, gerencia usuários e realiza a moderação dos cont
 ## 🔗 Links
 
 - 🌐 **Site publicado:** https://bem-vida.github.io/Bem-Vida-Mais/
-- 💻 **Repositório:** https://github.com/Luis-gomes2110/Bem-Vida-Mais
+- 💻 **Repositório:** https://github.com/Bem-Vida/Bem-Vida-Mais
 
 ---
 
