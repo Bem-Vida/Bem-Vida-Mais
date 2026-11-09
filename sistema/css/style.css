@@ -937,3 +937,83 @@ dialog.modal .botoes-modal {
     padding: 24px 16px;
   }
 }
+
+
+/* ==========================================================================
+   15. Área do Administrador
+   ========================================================================== */
+.status-aprovada,
+.status-ativo {
+  background: var(--verde-claro);
+  border-color: var(--verde-claro);
+  color: var(--branco);
+}
+
+.status-recusada,
+.status-suspensa,
+.status-suspenso {
+  border-color: var(--coral-destaque);
+  color: var(--coral-destaque);
+}
+
+.status-removida {
+  background: var(--texto-secundario);
+  border-color: var(--texto-secundario);
+  color: var(--branco);
+}
+
+.abas {
+  display: flex;
+  border-bottom: 1px solid var(--borda);
+  margin-bottom: 16px;
+}
+
+.abas button {
+  padding: 10px 22px;
+  border: none;
+  background: none;
+  font-family: var(--fonte-texto);
+  font-size: 0.9rem;
+  color: var(--texto-secundario);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+}
+
+.abas button.ativo {
+  color: var(--texto-titulo);
+  font-weight: 600;
+  border-bottom-color: var(--verde-acao);
+}
+
+dialog.modal.modal-largo {
+  max-width: 560px;
+}
+
+.dados-detalhe {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 8px 16px;
+  font-size: 0.9rem;
+  margin: 0 0 16px;
+}
+
+.dados-detalhe dt {
+  color: var(--texto-secundario);
+}
+
+.dados-detalhe dd {
+  margin: 0;
+}
+
+.nota-rodape {
+  font-size: 0.8rem;
+  color: var(--texto-secundario);
+  margin-top: 12px;
+}
+
+dialog.modal textarea {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+}

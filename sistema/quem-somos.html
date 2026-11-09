@@ -23,16 +23,18 @@
     </div>
   </header>
 
-  <section class="secao">
+    <section class="secao">
     <div class="container">
       <span class="eyebrow">INSTITUCIONAL</span>
       <h1>Quem Somos</h1>
       <hr>
 
-      <div class="duas-colunas" style="display:grid; grid-template-columns: 1.2fr 1fr; gap:40px; align-items:center; margin-bottom:40px;">
+      <!-- Sobre -->
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:40px; align-items:center; margin-bottom:40px;">
         <div>
           <h2 style="font-size:1.1rem;">Sobre o BemVida+</h2>
-          <p>[ Bloco de texto institucional sobre a plataforma BemVida+, sua história e a conexão entre pessoas doadoras, ONGs e associações de bairro. ]</p>
+          <p>O BemVida+ é uma plataforma que conecta pessoas que querem doar a ONGs e associações que precisam de itens físicos, como alimentos, roupas e produtos de higiene.</p>
+          <p>O projeto nasceu na Fatec Ferraz de Vasconcelos, com a ideia de reunir em um só lugar as campanhas de bairro e tornar mais simples o caminho entre quem doa e quem recebe.</p>
         </div>
         <div class="capa capa-roupas" style="height:200px;">
           <img src="img/quem-somos.jpg" alt="" onerror="this.remove()">
@@ -40,36 +42,75 @@
         </div>
       </div>
 
+      <!-- Missão -->
       <div style="margin-bottom:40px;">
         <span class="eyebrow">NOSSO OBJETIVO</span>
         <h2 style="font-size:1.1rem;">Missão do projeto</h2>
-        <p>[ Aproximar doadores e instituições, centralizar campanhas de itens físicos e tornar o acompanhamento das contribuições mais organizado e transparente. ]</p>
+        <p>Aproximar doadores e instituições, centralizar campanhas de itens físicos e tornar o acompanhamento das contribuições mais organizado e transparente.</p>
       </div>
       <hr>
+
+      <!-- Como funciona -->
+      <div style="margin: 40px 0;">
+        <span class="eyebrow">COMO FUNCIONA</span>
+        <h2 style="font-size:1.1rem; margin-bottom:20px;">Em três passos</h2>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
+          <div class="card" style="padding:20px;">
+            <span class="eyebrow">01</span>
+            <strong>A ONG cria a campanha</strong>
+            <p style="font-size:0.88rem; margin-top:6px;">A instituição, depois de validada, publica quais itens precisa e em que quantidade.</p>
+          </div>
+          <div class="card" style="padding:20px;">
+            <span class="eyebrow">02</span>
+            <strong>O doador registra a intenção</strong>
+            <p style="font-size:0.88rem; margin-top:6px;">Você escolhe a campanha, informa o que vai doar e combina a entrega com a ONG.</p>
+          </div>
+          <div class="card" style="padding:20px;">
+            <span class="eyebrow">03</span>
+            <strong>A ONG confirma o recebimento</strong>
+            <p style="font-size:0.88rem; margin-top:6px;">Quando os itens chegam, a ONG confirma e o progresso da campanha é atualizado.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transparência -->
+      <div class="card" style="padding:20px; margin-bottom:40px;">
+        <span class="eyebrow">TRANSPARÊNCIA</span>
+        <strong>O BemVida+ trata apenas de itens físicos</strong>
+        <p style="font-size:0.9rem; margin-top:6px;">Não há pagamentos, PIX, cartão ou boleto na plataforma, e ela também não cuida da entrega: a combinação fica entre doador e ONG. Toda ONG passa por validação da administração antes de publicar campanhas.</p>
+      </div>
     </div>
   </section>
 
   <section class="secao secao-alt">
     <div class="container">
       <span class="eyebrow">EQUIPE</span>
-      <h2 style="margin-bottom:24px;">Quem faz o BemVida+</h2>
+      <h2 style="margin-bottom:8px;">Quem faz o BemVida+</h2>
+      <p style="margin-bottom:24px;">Projeto Integrador II, curso de Análise e Desenvolvimento de Sistemas, Fatec Ferraz de Vasconcelos, 2026.</p>
 
-      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:20px;">
+
         <div class="card" style="padding:24px; text-align:center;">
-          <div class="avatar-circulo" style="margin:0 auto 12px; width:64px; height:64px;"></div>
-          <strong>[ Integrante 01 ]</strong>
-          <p style="font-size:0.85rem; margin-top:4px;">[ papel no projeto ]</p>
+          <div class="avatar-circulo" style="margin:0 auto 12px; width:64px; height:64px; display:flex; align-items:center; justify-content:center; font-weight:600; color:var(--texto-secundario);">M</div>
+          <strong>Matheus [Sobrenome]</strong>
+          <p style="font-size:0.8rem; color:var(--verde-principal); font-weight:600; margin:4px 0;">Product Owner</p>
+          <p style="font-size:0.85rem;">Organiza a documentação do projeto e desenvolve o site em HTML, CSS e JavaScript.</p>
         </div>
+
         <div class="card" style="padding:24px; text-align:center;">
-          <div class="avatar-circulo" style="margin:0 auto 12px; width:64px; height:64px;"></div>
-          <strong>[ Integrante 02 ]</strong>
-          <p style="font-size:0.85rem; margin-top:4px;">[ papel no projeto ]</p>
+          <div class="avatar-circulo" style="margin:0 auto 12px; width:64px; height:64px; display:flex; align-items:center; justify-content:center; font-weight:600; color:var(--texto-secundario);">LG</div>
+          <strong>Luís Gomes</strong>
+          <p style="font-size:0.8rem; color:var(--verde-principal); font-weight:600; margin:4px 0;">[ papel Scrum ]</p>
+          <p style="font-size:0.85rem;">Organiza o repositório do projeto no GitHub e cuida da modelagem do banco de dados.</p>
         </div>
+
         <div class="card" style="padding:24px; text-align:center;">
-          <div class="avatar-circulo" style="margin:0 auto 12px; width:64px; height:64px;"></div>
-          <strong>[ Integrante 03 ]</strong>
-          <p style="font-size:0.85rem; margin-top:4px;">[ papel no projeto ]</p>
+          <div class="avatar-circulo" style="margin:0 auto 12px; width:64px; height:64px; display:flex; align-items:center; justify-content:center; font-weight:600; color:var(--texto-secundario);">VA</div>
+          <strong>Vitor Alex</strong>
+          <p style="font-size:0.8rem; color:var(--verde-principal); font-weight:600; margin:4px 0;">[ papel Scrum ]</p>
+          <p style="font-size:0.85rem;">Testa as funcionalidades do site e confere se cada tela funciona como o esperado.</p>
         </div>
+
       </div>
     </div>
   </section>

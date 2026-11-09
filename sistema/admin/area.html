@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Administrador | BemVida+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout-logado">
+
+    <aside class="sidebar">
+      <a href="../index.html" class="logo"><img src="../img/logo.png" alt="BemVida+"> BemVida+</a>
+      <span class="rotulo-perfil">ADMINISTRADOR</span>
+      <nav class="menu-lateral">
+        <a href="area.html" class="ativo">Painel</a>
+        <a href="validar-ongs.html">Validar ONGs</a>
+        <a href="gerenciar-usuarios.html">Gerenciar Usuários</a>
+        <a href="moderacao-campanhas.html">Moderação de Campanhas</a>
+        <a href="../index.html">Sair</a>
+      </nav>
+    </aside>
+
+    <main class="conteudo-principal">
+
+      <div class="cabecalho-area">
+        <div>
+          <span class="eyebrow">ADMINISTRADOR</span>
+          <h1 style="font-size:1.4rem; margin-bottom:0;">Painel</h1>
+        </div>
+        <div class="info-usuario">
+          <span style="color: var(--texto-secundario); font-size: 0.9rem;">Administrador</span>
+          <div class="avatar-circulo"></div>
+        </div>
+      </div>
+
+      <div class="grade-quatro">
+        <div class="card card-resumo">
+          <span class="eyebrow">ONGS PENDENTES DE VALIDAÇÃO</span>
+          <div class="valor" id="r-pendentes"></div>
+        </div>
+        <div class="card card-resumo">
+          <span class="eyebrow">USUÁRIOS ATIVOS</span>
+          <div class="valor" id="r-usuarios"></div>
+        </div>
+        <div class="card card-resumo">
+          <span class="eyebrow">CAMPANHAS ATIVAS</span>
+          <div class="valor" id="r-ativas"></div>
+        </div>
+        <div class="card card-resumo">
+          <span class="eyebrow">CAMPANHAS EM ANÁLISE</span>
+          <div class="valor" id="r-analise"></div>
+        </div>
+      </div>
+
+      <span class="eyebrow">PENDÊNCIAS</span>
+      <h2 style="font-size:1.05rem; margin-bottom:16px;">O que precisa de atenção</h2>
+      <div class="grade-atalhos">
+        <a href="validar-ongs.html" class="card-atalho">
+          <strong>Validar ONGs →</strong>
+          <span>cadastros aguardando análise de documentos</span>
+        </a>
+        <a href="moderacao-campanhas.html" class="card-atalho">
+          <strong>Moderar Campanhas →</strong>
+          <span>campanhas em análise ou denunciadas</span>
+        </a>
+      </div>
+
+      <div class="card" style="padding:20px;">
+        <span class="eyebrow">ATIVIDADE RECENTE</span>
+        <p style="margin:0 0 8px;">12/09/2026 — ONG <strong>Casa do Bem</strong> enviou cadastro para validação.</p>
+        <p style="margin:0 0 8px;">11/09/2026 — Campanha <strong>Fraldas infantis</strong> recebeu uma denúncia.</p>
+        <p style="margin:0 0 8px;">10/09/2026 — Campanha <strong>Brinquedos para crianças</strong> recebeu uma denúncia.</p>
+        <p style="margin:0;">09/09/2026 — Usuário <strong>Carlos Lima</strong> foi suspenso.</p>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../js/dados.js"></script>
+  <script>
+    // Os números vêm do mesmo estado usado nas outras telas do Administrador
+    var ongs = carregarEstado('bemvida_ongs_admin', ONGS_ADMIN_INICIAL);
+    var usuarios = carregarEstado('bemvida_usuarios', USUARIOS_INICIAL);
+    var mod = carregarEstado('bemvida_moderacao', MODERACAO_INICIAL);
+
+    function contar(lista, funcao) { return lista.filter(funcao).length; }
+    var modLista = Object.keys(mod).map(function (k) { return mod[k]; });
+
+    document.getElementById('r-pendentes').textContent =
+      String(contar(ongs, function (o) { return o.status === 'Pendente'; })).padStart(2, '0');
+    document.getElementById('r-usuarios').textContent =
+      contar(usuarios, function (u) { return u.status === 'Ativo'; });
+    document.getElementById('r-ativas').textContent =
+      contar(modLista, function (m) { return m.status === 'Ativa'; });
+    document.getElementById('r-analise').textContent =
+      String(contar(modLista, function (m) { return m.status === 'Em análise'; })).padStart(2, '0');
+  </script>
+
+</body>
+</html>

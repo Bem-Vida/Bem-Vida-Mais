@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciar Usuários | BemVida+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout-logado">
+
+    <aside class="sidebar">
+      <a href="../index.html" class="logo"><img src="../img/logo.png" alt="BemVida+"> BemVida+</a>
+      <span class="rotulo-perfil">ADMINISTRADOR</span>
+      <nav class="menu-lateral">
+        <a href="area.html">Painel</a>
+        <a href="validar-ongs.html">Validar ONGs</a>
+        <a href="gerenciar-usuarios.html" class="ativo">Gerenciar Usuários</a>
+        <a href="moderacao-campanhas.html">Moderação de Campanhas</a>
+        <a href="../index.html">Sair</a>
+      </nav>
+    </aside>
+
+    <main class="conteudo-principal">
+
+      <div class="cabecalho-area">
+        <div>
+          <span class="eyebrow">ADMINISTRADOR</span>
+          <h1 style="font-size:1.4rem; margin-bottom:0;">Gerenciar Usuários</h1>
+        </div>
+        <div class="info-usuario">
+          <span style="color: var(--texto-secundario); font-size: 0.9rem;">Administrador</span>
+          <div class="avatar-circulo"></div>
+        </div>
+      </div>
+
+      <div class="abas" id="abas">
+        <button class="ativo" data-aba="Doador">Doadores</button>
+        <button data-aba="ONG">ONGs</button>
+      </div>
+
+      <div class="card barra-ferramentas">
+        <div class="campo-formulario busca">
+          <input type="text" id="busca" placeholder="buscar por nome ou e-mail...">
+        </div>
+        <div class="campo-formulario">
+          <select id="filtro-status">
+            <option value="todos">Todos</option>
+            <option>Ativo</option>
+            <option>Suspenso</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tabela-wrap">
+        <table class="tabela">
+          <thead>
+            <tr><th>NOME</th><th>E-MAIL</th><th>PERFIL</th><th>DATA DE CADASTRO</th><th>STATUS</th><th>AÇÕES</th></tr>
+          </thead>
+          <tbody id="tabela"></tbody>
+        </table>
+      </div>
+      <p class="nota-rodape">Dados pessoais são tratados conforme a LGPD.</p>
+
+      <!-- Ver perfil (somente leitura) -->
+      <dialog class="modal" id="modal-perfil">
+        <span class="eyebrow">PERFIL DO USUÁRIO</span>
+        <h3 id="p-nome"></h3>
+        <dl class="dados-detalhe" id="p-dados"></dl>
+        <div class="botoes-modal"><button type="button" class="botao botao-escuro" id="p-fechar" style="border:none;">Fechar</button></div>
+      </dialog>
+
+      <!-- Janela de motivo (usada para recusar, suspender e remover) -->
+      <dialog class="modal" id="modal-motivo">
+        <h3 id="motivo-titulo"></h3>
+        <p id="motivo-texto"></p>
+        <div class="campo-formulario">
+          <label for="motivo-campo">Motivo (obrigatório)</label>
+          <textarea id="motivo-campo" rows="3" placeholder="Explique o motivo da decisão"></textarea>
+          <div class="erro-campo" id="motivo-erro">Informe o motivo.</div>
+        </div>
+        <div class="botoes-modal">
+          <button type="button" class="botao botao-secundario" id="motivo-voltar">Voltar</button>
+          <button type="button" class="botao botao-escuro" id="motivo-confirmar" style="border:none;"></button>
+        </div>
+      </dialog>
+
+    </main>
+  </div>
+
+  <script src="../js/dados.js"></script>
+  <script>
+    var usuarios = carregarEstado('bemvida_usuarios', USUARIOS_INICIAL);
+    var abaAtual = 'Doador';
+
+    // Abre a janela de motivo. "aoConfirmar" recebe o texto digitado.
+    var aoConfirmarMotivo = null;
+    var modalMotivo = document.getElementById('modal-motivo');
+    function pedirMotivo(titulo, texto, rotuloBotao, aoConfirmar) {
+      document.getElementById('motivo-titulo').textContent = titulo;
+      document.getElementById('motivo-texto').textContent = texto;
+      document.getElementById('motivo-confirmar').textContent = rotuloBotao;
+      document.getElementById('motivo-campo').value = '';
+      document.getElementById('motivo-erro').style.display = 'none';
+      aoConfirmarMotivo = aoConfirmar;
+      modalMotivo.showModal();
+    }
+    document.getElementById('motivo-voltar').addEventListener('click', function () { modalMotivo.close(); });
+    document.getElementById('motivo-confirmar').addEventListener('click', function () {
+      var motivo = document.getElementById('motivo-campo').value.trim();
+      if (motivo === '') {
+        document.getElementById('motivo-erro').style.display = 'block';
+        return;
+      }
+      modalMotivo.close();
+      aoConfirmarMotivo(motivo);
+    });
+
+    function desenhar() {
+      var texto = document.getElementById('busca').value.trim().toLowerCase();
+      var status = document.getElementById('filtro-status').value;
+      var linhas = usuarios.filter(function (u) {
+        return u.perfil === abaAtual &&
+          (u.nome + ' ' + u.email).toLowerCase().indexOf(texto) !== -1 &&
+          (status === 'todos' || u.status === status);
+      }).map(function (u) {
+        var acao = u.status === 'Ativo'
+          ? '<button class="botao-mini perigo" data-suspender="' + u.id + '">Suspender</button>'
+          : '<button class="botao-mini confirmar" data-reativar="' + u.id + '">Reativar</button>';
+        return '<tr><td><strong>' + u.nome + '</strong></td><td>' + u.email + '</td><td>' + u.perfil + '</td><td>' + u.cadastro +
+          '</td><td><span class="' + classeStatus(u.status) + '">' + u.status + '</span></td>' +
+          '<td><div class="celula-acoes"><button class="botao-mini" data-ver="' + u.id + '">Ver perfil</button>' + acao + '</div></td></tr>';
+      });
+      document.getElementById('tabela').innerHTML = linhas.length
+        ? linhas.join('')
+        : '<tr><td colspan="6" class="vazio">[ nenhum usuário encontrado ]</td></tr>';
+    }
+
+    function achar(id) { return usuarios.find(function (u) { return u.id === Number(id); }); }
+    function mudar(u, status, motivo) {
+      u.status = status; u.motivo = motivo || '';
+      salvarEstado('bemvida_usuarios', usuarios);
+      desenhar();
+    }
+
+    document.getElementById('abas').addEventListener('click', function (e) {
+      var aba = e.target.getAttribute('data-aba');
+      if (!aba) return;
+      abaAtual = aba;
+      document.querySelectorAll('#abas button').forEach(function (b) {
+        b.classList.toggle('ativo', b.getAttribute('data-aba') === aba);
+      });
+      desenhar();
+    });
+
+    var modalPerfil = document.getElementById('modal-perfil');
+    document.getElementById('tabela').addEventListener('click', function (e) {
+      var ver = e.target.getAttribute('data-ver');
+      var susp = e.target.getAttribute('data-suspender');
+      var reat = e.target.getAttribute('data-reativar');
+      if (ver) {
+        var u = achar(ver);
+        document.getElementById('p-nome').textContent = u.nome;
+        document.getElementById('p-dados').innerHTML =
+          '<dt>E-mail</dt><dd>' + u.email + '</dd><dt>Perfil</dt><dd>' + u.perfil + '</dd>' +
+          '<dt>Cadastro</dt><dd>' + u.cadastro + '</dd>' +
+          '<dt>Status</dt><dd><span class="' + classeStatus(u.status) + '">' + u.status + '</span></dd>' +
+          (u.motivo ? '<dt>Motivo</dt><dd>' + esc(u.motivo) + '</dd>' : '');
+        modalPerfil.showModal();
+      }
+      if (susp) {
+        var alvo = achar(susp);
+        pedirMotivo('Suspender usuário', 'A conta de "' + alvo.nome + '" ficará sem acesso até ser reativada.', 'Confirmar suspensão', function (motivo) {
+          mudar(alvo, 'Suspenso', motivo);
+          mostrarAviso('Usuário suspenso.');
+        });
+      }
+      if (reat) {
+        mudar(achar(reat), 'Ativo');
+        mostrarAviso('Usuário reativado.');
+      }
+    });
+    document.getElementById('p-fechar').addEventListener('click', function () { modalPerfil.close(); });
+
+    document.getElementById('busca').addEventListener('input', desenhar);
+    document.getElementById('filtro-status').addEventListener('change', desenhar);
+    desenhar();
+  </script>
+
+</body>
+</html>

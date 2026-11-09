@@ -117,3 +117,91 @@ function carregarCampanhasOng() {
 function salvarCampanhasOng(lista) {
   try { localStorage.setItem('bemvida_ong_campanhas_v2', JSON.stringify(lista)); } catch (e) {}
 }
+
+/* ==========================================================================
+   Área do Administrador — dados de exemplo e funções auxiliares
+   O estado (aprovar ONG, suspender usuário, moderar campanha) fica no
+   localStorage; se ele não estiver disponível, usa os dados iniciais.
+   ========================================================================== */
+function carregarEstado(chave, inicial) {
+  try {
+    var salvo = localStorage.getItem(chave);
+    if (salvo) return JSON.parse(salvo);
+  } catch (e) { /* sem localStorage: usa os dados iniciais */ }
+  return JSON.parse(JSON.stringify(inicial));
+}
+
+function salvarEstado(chave, valor) {
+  try { localStorage.setItem(chave, JSON.stringify(valor)); } catch (e) {}
+}
+
+/* "Em análise" vira a classe "status-em-analise" (sem acento e sem espaço) */
+function classeStatus(texto) {
+  return 'status status-' + texto.toLowerCase().normalize('NFD')
+    .replace(/[̀-ͯ]/g, '').replace(/\s+/g, '-');
+}
+
+/* Evita que texto digitado (ex.: motivo) vire HTML ao ser exibido */
+function esc(texto) {
+  return String(texto).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+/* ONGs que se cadastraram (tela Validar ONGs) */
+const ONGS_ADMIN_INICIAL = [
+  { id: 1, nome: 'Casa do Bem', cnpj: '23.456.789/0001-01', email: 'ola@casadobem.org', telefone: '(11) 4000-1111',
+    area: 'Assistência social', endereco: 'Rua das Palmeiras, 45, Centro, Ferraz de Vasconcelos — SP',
+    descricao: 'Atende famílias da região com alimentos e roupas.', cadastro: '12/09/2026', status: 'Pendente', motivo: '' },
+  { id: 2, nome: 'Lar Feliz', cnpj: '45.678.901/0001-23', email: 'lar@larfeliz.org', telefone: '(11) 4000-2222',
+    area: 'Acolhimento de idosos', endereco: 'Av. Brasil, 800, Vila Nova, Poá — SP',
+    descricao: 'Lar de acolhimento que recebe doações de higiene e roupas de cama.', cadastro: '11/09/2026', status: 'Pendente', motivo: '' },
+  { id: 3, nome: 'Associação Mãos Amigas', cnpj: '12.345.678/0001-90', email: 'contato@maosamigas.org', telefone: '(11) 4000-3333',
+    area: 'Assistência social', endereco: 'Rua das Flores, 100, Centro, São Paulo — SP',
+    descricao: 'Atende famílias do bairro com alimentos, roupas e itens de higiene.', cadastro: '15/06/2026', status: 'Aprovada', motivo: '' },
+  { id: 4, nome: 'ONG Vida Solidária', cnpj: '34.567.890/0001-12', email: 'contato@vidasolidaria.org', telefone: '(11) 4000-4444',
+    area: 'Educação e vestuário', endereco: 'Rua da Paz, 220, Jardim Alegre, Itaquaquecetuba — SP',
+    descricao: 'Campanhas de agasalhos, calçados e material escolar.', cadastro: '03/07/2026', status: 'Aprovada', motivo: '' },
+  { id: 5, nome: 'Instituto Esperança', cnpj: '56.789.012/0001-34', email: 'contato@esperanca.org', telefone: '(11) 4000-5555',
+    area: 'Saúde e higiene', endereco: 'Rua Nova Esperança, 15, Centro, Suzano — SP',
+    descricao: 'Kits de higiene e fraldas para abrigos e famílias.', cadastro: '15/08/2026', status: 'Aprovada', motivo: '' },
+  { id: 6, nome: 'Projeto Abrigo', cnpj: '67.890.123/0001-45', email: 'abrigo@projeto.org', telefone: '(11) 4000-6666',
+    area: 'Moradia', endereco: 'Rua Sem Número, s/n, Poá — SP',
+    descricao: 'Cadastro com documentação incompleta.', cadastro: '20/08/2026', status: 'Recusada', motivo: 'Documentação ilegível.' }
+];
+const ONG_DOCUMENTOS = ['Estatuto social.pdf', 'Cartão CNPJ.pdf', 'Ata de eleição da diretoria.pdf'];
+
+/* Usuários (tela Gerenciar Usuários) */
+const USUARIOS_INICIAL = [
+  { id: 1,  nome: 'Maria Silva',   email: 'maria@exemplo.com',  perfil: 'Doador', cadastro: '12/09/2026', status: 'Ativo', motivo: '' },
+  { id: 2,  nome: 'Ana Souza',     email: 'ana@email.com',      perfil: 'Doador', cadastro: '10/09/2026', status: 'Ativo', motivo: '' },
+  { id: 3,  nome: 'Bruno Costa',   email: 'bruno@email.com',    perfil: 'Doador', cadastro: '05/09/2026', status: 'Ativo', motivo: '' },
+  { id: 4,  nome: 'Carlos Lima',   email: 'carlos@email.com',   perfil: 'Doador', cadastro: '01/09/2026', status: 'Suspenso', motivo: 'Várias intenções de doação não cumpridas.' },
+  { id: 5,  nome: 'Daniela Rocha', email: 'daniela@email.com',  perfil: 'Doador', cadastro: '25/08/2026', status: 'Ativo', motivo: '' },
+  { id: 6,  nome: 'Eduardo Alves', email: 'eduardo@email.com',  perfil: 'Doador', cadastro: '18/08/2026', status: 'Ativo', motivo: '' },
+  { id: 7,  nome: 'Associação Mãos Amigas', email: 'contato@maosamigas.org',   perfil: 'ONG', cadastro: '15/06/2026', status: 'Ativo', motivo: '' },
+  { id: 8,  nome: 'ONG Vida Solidária',     email: 'contato@vidasolidaria.org', perfil: 'ONG', cadastro: '03/07/2026', status: 'Ativo', motivo: '' },
+  { id: 9,  nome: 'Instituto Esperança',    email: 'contato@esperanca.org',     perfil: 'ONG', cadastro: '15/08/2026', status: 'Ativo', motivo: '' }
+];
+
+/* Moderação: situação de cada campanha de CAMPANHAS (a chave é o id) */
+const MODERACAO_INICIAL = {
+  1: { status: 'Ativa', motivo: '' },
+  2: { status: 'Ativa', motivo: '' },
+  3: { status: 'Ativa', motivo: '' },
+  4: { status: 'Ativa', motivo: '' },
+  5: { status: 'Ativa', motivo: '' },
+  6: { status: 'Em análise', motivo: 'Denúncia: descrição inconsistente com os itens.' },
+  7: { status: 'Ativa', motivo: '' },
+  8: { status: 'Em análise', motivo: 'Denúncia: fotos não correspondem à campanha.' },
+  9: { status: 'Suspensa', motivo: 'Suspensa para revisão das informações.' }
+};
+
+/* Campanhas que o público pode ver: as suspensas e removidas somem do site */
+function campanhasPublicas() {
+  var mod = carregarEstado('bemvida_moderacao', MODERACAO_INICIAL);
+  return CAMPANHAS.filter(function (c) {
+    var s = mod[c.id] ? mod[c.id].status : 'Ativa';
+    return s !== 'Suspensa' && s !== 'Removida';
+  });
+}

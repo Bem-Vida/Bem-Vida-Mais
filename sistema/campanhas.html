@@ -80,7 +80,7 @@
       var texto = campoBusca.value.trim().toLowerCase();
       var cat = campoCategoria.value;
 
-      var lista = CAMPANHAS.filter(function (c) {
+      var lista = campanhasPublicas().filter(function (c) {
         var bateTexto = c.titulo.toLowerCase().indexOf(texto) !== -1;
         var bateCategoria = (cat === 'todas') || (c.categoria === cat);
         return bateTexto && bateCategoria;
