@@ -467,3 +467,41 @@ img {
     display: none;
   }
 }
+
+
+/* 14. Ajustes para celular
+   Vêm por último de propósito: quando duas regras empatam, vale a última. */
+@media (max-width: 860px) {
+  /* Em vez de esconder o menu, ele desce para uma segunda linha que rola de lado */
+  .cabecalho-publico {
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    gap: 8px 12px;
+  }
+
+  .nav-publica {
+    display: flex;
+    order: 3;
+    width: 100%;
+    gap: 22px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 2px;
+  }
+
+  .nav-publica a {
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .secao {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+}
