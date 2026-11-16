@@ -1017,3 +1017,124 @@ dialog.modal textarea {
   min-height: 90px;
   resize: vertical;
 }
+
+
+/* ==========================================================================
+   16. Ajustes para celular
+   Vêm por último de propósito: quando duas regras empatam, vale a última.
+   ========================================================================== */
+@media (max-width: 860px) {
+  /* Área logada: a sidebar vira uma faixa no topo, com o menu rolando de lado */
+  .sidebar {
+    padding: 12px 16px;
+  }
+
+  .sidebar .logo {
+    margin-bottom: 8px;
+  }
+
+  .menu-lateral {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .menu-lateral a {
+    flex-shrink: 0;
+    white-space: nowrap;
+    margin-bottom: 0;
+    padding: 9px 14px;
+  }
+
+  .conteudo-principal {
+    padding: 24px 16px;
+  }
+
+  .cabecalho-area {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .grade-quatro {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* A galeria da campanha continua com 3 quadrinhos lado a lado */
+  .grade-tres[style*="gap:8px"] {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  /* Cabeçalho público: logo e botões em cima, menu embaixo */
+  .cabecalho-publico {
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    gap: 8px 12px;
+  }
+
+  .nav-publica {
+    display: flex;
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    gap: 22px;
+  }
+
+  .acoes-cabecalho {
+    display: flex;
+    gap: 8px;
+  }
+
+  .acoes-cabecalho .botao {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+
+  /* Grades escritas direto no HTML (style="...") viram uma coluna só */
+  [style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  /* Tabelas: mantêm a largura e rolam de lado dentro do quadro */
+  .tabela {
+    min-width: 640px;
+  }
+
+  /* 16px evita o zoom automático do iPhone ao tocar em um campo */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  .botao-mini {
+    padding: 9px 14px;
+  }
+
+  .aviso-flutuante {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cartao-auth {
+    padding: 28px 20px;
+  }
+
+  .pagina-auth {
+    padding: 24px 12px;
+  }
+}
