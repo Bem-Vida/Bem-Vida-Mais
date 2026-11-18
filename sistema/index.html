@@ -51,7 +51,7 @@
           <span class="eyebrow">CAMPANHAS</span>
           <h2>Campanhas em destaque</h2>
         </div>
-        <a href="campanhas.html" style="font-size:0.9rem; color:var(--texto-secundario);">Ver todas →</a>
+        <a href="campanhas.html" style="font-size:0.9rem; color:var(--texto-secundario); white-space:nowrap;">Ver todas →</a>
       </div>
 
       <!-- Os 3 cards são montados pelo JS a partir de js/dados.js -->
@@ -66,7 +66,7 @@
       <span class="eyebrow">COMO FUNCIONA</span>
       <h2 style="margin-bottom:24px;">Uma rede de solidariedade</h2>
 
-      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
+      <div class="carrossel" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
         <div class="card" style="padding:20px;">
           <span class="eyebrow">01</span>
           <h3 style="font-size:1rem;">Para Doadores</h3>
@@ -107,6 +107,8 @@
     document.getElementById('destaques').innerHTML =
       campanhasPublicas().slice(0, 3).map(htmlCard).join('');
   </script>
+
+  <script src="js/carrossel.js"></script>
 
 </body>
 </html>

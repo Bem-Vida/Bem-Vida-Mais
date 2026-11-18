@@ -505,3 +505,92 @@ img {
     padding-bottom: 48px;
   }
 }
+/* ==========================================================================
+   Carrossel (cards que deslizam de lado no celular, com setas)
+   Usado junto com js/carrossel.js e a classe "carrossel" no HTML.
+   ========================================================================== */
+.carrossel-caixa {
+  position: relative;
+}
+
+.carrossel-seta {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .carrossel {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding: 4px 2px 12px;
+    scrollbar-width: none;
+  }
+
+  .carrossel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carrossel > * {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+  }
+
+  .carrossel-seta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    padding: 0 0 3px;
+    border: 1px solid var(--borda);
+    border-radius: 50%;
+    background: var(--branco);
+    color: var(--verde-principal);
+    font-size: 1.7rem;
+    line-height: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .carrossel-seta-esq {
+    left: -6px;
+  }
+
+  .carrossel-seta-dir {
+    right: -6px;
+  }
+
+  .carrossel-seta.escondida {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* ==========================================================================
+   Paleta: botões em verde escuro
+   Bloco isolado de propósito: para voltar aos botões pretos, é só apagar
+   este bloco inteiro (da linha "Paleta" até o fim do arquivo).
+   ========================================================================== */
+:root {
+  --botao-verde: #0E7E52;        /* mesmo verde principal da logo e da sidebar */
+  --botao-verde-hover: #0A6B45;  /* um tom mais escuro ao passar o mouse */
+  --verde-suave: #E8F5EE;        /* fundo claro dos atalhos */
+}
+
+.botao-escuro {
+  background-color: var(--botao-verde);
+}
+
+.botao-escuro:hover {
+  background-color: var(--botao-verde-hover);
+}
+
+.botao-secundario {
+  border-color: var(--botao-verde);
+  color: var(--botao-verde);
+}

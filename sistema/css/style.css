@@ -1019,32 +1019,64 @@ dialog.modal textarea {
 }
 
 
+.botao-menu {
+  display: none;
+}
+
 /* ==========================================================================
    16. Ajustes para celular
    Vêm por último de propósito: quando duas regras empatam, vale a última.
    ========================================================================== */
 @media (max-width: 860px) {
-  /* Área logada: a sidebar vira uma faixa no topo, com o menu rolando de lado */
+  /* Área logada: a sidebar vira uma faixa no topo com o logo e o botão ☰.
+     O menu só aparece quando a barra recebe a classe "aberto" (js/menu.js). */
   .sidebar {
-    padding: 12px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
   }
 
   .sidebar .logo {
-    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
   }
 
-  .menu-lateral {
+  .botao-menu {
     display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    padding-bottom: 4px;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: var(--raio);
+    background: transparent;
+    color: var(--branco);
+    cursor: pointer;
+  }
+
+  .sidebar .rotulo-perfil,
+  .sidebar .menu-lateral {
+    display: none;
+    width: 100%;
+  }
+
+  .sidebar.aberto .rotulo-perfil {
+    display: block;
+    margin-top: 12px;
+  }
+
+  .sidebar.aberto .menu-lateral {
+    display: block;
+    margin-top: 6px;
   }
 
   .menu-lateral a {
-    flex-shrink: 0;
-    white-space: nowrap;
-    margin-bottom: 0;
-    padding: 9px 14px;
+    padding: 12px 10px;
   }
 
   .conteudo-principal {
@@ -1137,4 +1169,126 @@ dialog.modal textarea {
   .pagina-auth {
     padding: 24px 12px;
   }
+}
+/* ==========================================================================
+   Carrossel (cards que deslizam de lado no celular, com setas)
+   Usado junto com js/carrossel.js e a classe "carrossel" no HTML.
+   ========================================================================== */
+.carrossel-caixa {
+  position: relative;
+}
+
+.carrossel-seta {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .carrossel {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding: 4px 2px 12px;
+    scrollbar-width: none;
+  }
+
+  .carrossel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carrossel > * {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+  }
+
+  .carrossel-seta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    padding: 0 0 3px;
+    border: 1px solid var(--borda);
+    border-radius: 50%;
+    background: var(--branco);
+    color: var(--verde-principal);
+    font-size: 1.7rem;
+    line-height: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .carrossel-seta-esq {
+    left: -6px;
+  }
+
+  .carrossel-seta-dir {
+    right: -6px;
+  }
+
+  .carrossel-seta.escondida {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* ==========================================================================
+   Paleta: botões em verde escuro
+   Bloco isolado de propósito: para voltar aos botões pretos, é só apagar
+   este bloco inteiro (da linha "Paleta" até o fim do arquivo).
+   ========================================================================== */
+:root {
+  --botao-verde: #0E7E52;        /* mesmo verde principal da logo e da sidebar */
+  --botao-verde-hover: #0A6B45;  /* um tom mais escuro ao passar o mouse */
+  --verde-suave: #E8F5EE;        /* fundo claro dos atalhos */
+}
+
+.botao-escuro {
+  background-color: var(--botao-verde);
+}
+
+.botao-escuro:hover {
+  background-color: var(--botao-verde-hover);
+}
+
+.botao-secundario {
+  border-color: var(--botao-verde);
+  color: var(--botao-verde);
+}
+
+.botao-mini {
+  border-color: var(--botao-verde);
+  color: var(--botao-verde);
+}
+
+.paginacao button.ativo {
+  background: var(--botao-verde);
+  border-color: var(--botao-verde);
+}
+
+.aviso-flutuante {
+  background: var(--botao-verde);
+}
+
+/* Atalhos da Minha Área: verde claro com título em verde escuro */
+.card-atalho {
+  background-color: var(--verde-suave);
+  border: 1px solid #BFE3D0;
+  color: var(--botao-verde);
+}
+
+.card-atalho:hover {
+  border-color: var(--botao-verde);
+}
+
+.card-atalho strong {
+  color: var(--botao-verde-hover);
+}
+
+.card-atalho span {
+  color: var(--texto-secundario);
 }
